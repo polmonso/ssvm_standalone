@@ -1,0 +1,557 @@
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/svn/lucchi/!svn/ver/4074/trunk/EM/superpixels_public/branches/auto_step/core
+END
+label_cache.h
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/svn/lucchi/!svn/ver/3923/trunk/EM/superpixels_public/branches/auto_step/core/label_cache.h
+END
+F_LoadFromFile.h
+K 25
+svn:wc:ra_dav:version-url
+V 94
+/svn/lucchi/!svn/ver/3923/trunk/EM/superpixels_public/branches/auto_step/core/F_LoadFromFile.h
+END
+gi_MF.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/svn/lucchi/!svn/ver/3923/trunk/EM/superpixels_public/branches/auto_step/core/gi_MF.cpp
+END
+graphInference.h
+K 25
+svn:wc:ra_dav:version-url
+V 94
+/svn/lucchi/!svn/ver/4015/trunk/EM/superpixels_public/branches/auto_step/core/graphInference.h
+END
+F_Glcm.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/svn/lucchi/!svn/ver/3923/trunk/EM/superpixels_public/branches/auto_step/core/F_Glcm.cpp
+END
+F_Lbp.h
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/svn/lucchi/!svn/ver/3923/trunk/EM/superpixels_public/branches/auto_step/core/F_Lbp.h
+END
+globals.h
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/svn/lucchi/!svn/ver/4073/trunk/EM/superpixels_public/branches/auto_step/core/globals.h
+END
+predict.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/svn/lucchi/!svn/ver/4074/trunk/EM/superpixels_public/branches/auto_step/core/predict.cpp
+END
+svm_struct_api_types.h
+K 25
+svn:wc:ra_dav:version-url
+V 100
+/svn/lucchi/!svn/ver/4023/trunk/EM/superpixels_public/branches/auto_step/core/svm_struct_api_types.h
+END
+StatModel.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/svn/lucchi/!svn/ver/3923/trunk/EM/superpixels_public/branches/auto_step/core/StatModel.cpp
+END
+F_Precomputed.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 95
+/svn/lucchi/!svn/ver/3923/trunk/EM/superpixels_public/branches/auto_step/core/F_Precomputed.cpp
+END
+Histogram.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/svn/lucchi/!svn/ver/4023/trunk/EM/superpixels_public/branches/auto_step/core/Histogram.cpp
+END
+Slice.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/svn/lucchi/!svn/ver/4074/trunk/EM/superpixels_public/branches/auto_step/core/Slice.cpp
+END
+label_cache.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 93
+/svn/lucchi/!svn/ver/3923/trunk/EM/superpixels_public/branches/auto_step/core/label_cache.cpp
+END
+svm_struct_api.c
+K 25
+svn:wc:ra_dav:version-url
+V 94
+/svn/lucchi/!svn/ver/4074/trunk/EM/superpixels_public/branches/auto_step/core/svm_struct_api.c
+END
+inference_globals.h
+K 25
+svn:wc:ra_dav:version-url
+V 97
+/svn/lucchi/!svn/ver/4072/trunk/EM/superpixels_public/branches/auto_step/core/inference_globals.h
+END
+F_ColorHistogram.h
+K 25
+svn:wc:ra_dav:version-url
+V 96
+/svn/lucchi/!svn/ver/3923/trunk/EM/superpixels_public/branches/auto_step/core/F_ColorHistogram.h
+END
+svm_struct_api.h
+K 25
+svn:wc:ra_dav:version-url
+V 94
+/svn/lucchi/!svn/ver/4023/trunk/EM/superpixels_public/branches/auto_step/core/svm_struct_api.h
+END
+F_LoadFromFile.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 96
+/svn/lucchi/!svn/ver/4071/trunk/EM/superpixels_public/branches/auto_step/core/F_LoadFromFile.cpp
+END
+Supernode.h
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/svn/lucchi/!svn/ver/3923/trunk/EM/superpixels_public/branches/auto_step/core/Supernode.h
+END
+F_Position.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/svn/lucchi/!svn/ver/3923/trunk/EM/superpixels_public/branches/auto_step/core/F_Position.cpp
+END
+F_3dRays.h
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/svn/lucchi/!svn/ver/4059/trunk/EM/superpixels_public/branches/auto_step/core/F_3dRays.h
+END
+graphInference.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 96
+/svn/lucchi/!svn/ver/3923/trunk/EM/superpixels_public/branches/auto_step/core/graphInference.cpp
+END
+F_GradientStats.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 97
+/svn/lucchi/!svn/ver/4059/trunk/EM/superpixels_public/branches/auto_step/core/F_GradientStats.cpp
+END
+colormap.h
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/svn/lucchi/!svn/ver/4023/trunk/EM/superpixels_public/branches/auto_step/core/colormap.h
+END
+F_Lbp.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/svn/lucchi/!svn/ver/3923/trunk/EM/superpixels_public/branches/auto_step/core/F_Lbp.cpp
+END
+F_Bias.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/svn/lucchi/!svn/ver/4064/trunk/EM/superpixels_public/branches/auto_step/core/F_Bias.cpp
+END
+svm_struct_learn_custom.c
+K 25
+svn:wc:ra_dav:version-url
+V 103
+/svn/lucchi/!svn/ver/4074/trunk/EM/superpixels_public/branches/auto_step/core/svm_struct_learn_custom.c
+END
+gi_MF.h
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/svn/lucchi/!svn/ver/4023/trunk/EM/superpixels_public/branches/auto_step/core/gi_MF.h
+END
+gi_sampling.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 93
+/svn/lucchi/!svn/ver/4072/trunk/EM/superpixels_public/branches/auto_step/core/gi_sampling.cpp
+END
+svm_struct_learn_custom.h
+K 25
+svn:wc:ra_dav:version-url
+V 103
+/svn/lucchi/!svn/ver/4066/trunk/EM/superpixels_public/branches/auto_step/core/svm_struct_learn_custom.h
+END
+Feature.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/svn/lucchi/!svn/ver/4071/trunk/EM/superpixels_public/branches/auto_step/core/Feature.cpp
+END
+Slice3d.h
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/svn/lucchi/!svn/ver/4074/trunk/EM/superpixels_public/branches/auto_step/core/Slice3d.h
+END
+F_Glcm.h
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/svn/lucchi/!svn/ver/3923/trunk/EM/superpixels_public/branches/auto_step/core/F_Glcm.h
+END
+globalsE.h
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/svn/lucchi/!svn/ver/4059/trunk/EM/superpixels_public/branches/auto_step/core/globalsE.h
+END
+F_Filter.h
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/svn/lucchi/!svn/ver/3923/trunk/EM/superpixels_public/branches/auto_step/core/F_Filter.h
+END
+gi_maxflow.h
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/svn/lucchi/!svn/ver/4023/trunk/EM/superpixels_public/branches/auto_step/core/gi_maxflow.h
+END
+Histogram.h
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/svn/lucchi/!svn/ver/3923/trunk/EM/superpixels_public/branches/auto_step/core/Histogram.h
+END
+inference.h
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/svn/lucchi/!svn/ver/4061/trunk/EM/superpixels_public/branches/auto_step/core/inference.h
+END
+gi_libDAI.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/svn/lucchi/!svn/ver/4059/trunk/EM/superpixels_public/branches/auto_step/core/gi_libDAI.cpp
+END
+gi_MRF.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/svn/lucchi/!svn/ver/3923/trunk/EM/superpixels_public/branches/auto_step/core/gi_MRF.cpp
+END
+Slice.h
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/svn/lucchi/!svn/ver/3923/trunk/EM/superpixels_public/branches/auto_step/core/Slice.h
+END
+Supernode.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/svn/lucchi/!svn/ver/3923/trunk/EM/superpixels_public/branches/auto_step/core/Supernode.cpp
+END
+Config.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/svn/lucchi/!svn/ver/4074/trunk/EM/superpixels_public/branches/auto_step/core/Config.cpp
+END
+gi_multiobject.h
+K 25
+svn:wc:ra_dav:version-url
+V 94
+/svn/lucchi/!svn/ver/4064/trunk/EM/superpixels_public/branches/auto_step/core/gi_multiobject.h
+END
+F_Histogram.h
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/svn/lucchi/!svn/ver/3923/trunk/EM/superpixels_public/branches/auto_step/core/F_Histogram.h
+END
+F_Combo.h
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/svn/lucchi/!svn/ver/3923/trunk/EM/superpixels_public/branches/auto_step/core/F_Combo.h
+END
+F_3dRays.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/svn/lucchi/!svn/ver/4059/trunk/EM/superpixels_public/branches/auto_step/core/F_3dRays.cpp
+END
+svm.h
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/lucchi/!svn/ver/3923/trunk/EM/superpixels_public/branches/auto_step/core/svm.h
+END
+utils_ITK.h
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/svn/lucchi/!svn/ver/3923/trunk/EM/superpixels_public/branches/auto_step/core/utils_ITK.h
+END
+colormap.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/svn/lucchi/!svn/ver/3923/trunk/EM/superpixels_public/branches/auto_step/core/colormap.cpp
+END
+oSVM_types.h
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/svn/lucchi/!svn/ver/3923/trunk/EM/superpixels_public/branches/auto_step/core/oSVM_types.h
+END
+F_Position.h
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/svn/lucchi/!svn/ver/3923/trunk/EM/superpixels_public/branches/auto_step/core/F_Position.h
+END
+energyParam.h
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/svn/lucchi/!svn/ver/3923/trunk/EM/superpixels_public/branches/auto_step/core/energyParam.h
+END
+F_Gaussian.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/svn/lucchi/!svn/ver/3923/trunk/EM/superpixels_public/branches/auto_step/core/F_Gaussian.cpp
+END
+svm_struct_globals.h
+K 25
+svn:wc:ra_dav:version-url
+V 98
+/svn/lucchi/!svn/ver/4074/trunk/EM/superpixels_public/branches/auto_step/core/svm_struct_globals.h
+END
+Slice_P.h
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/svn/lucchi/!svn/ver/4059/trunk/EM/superpixels_public/branches/auto_step/core/Slice_P.h
+END
+predict_mbest.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 95
+/svn/lucchi/!svn/ver/4068/trunk/EM/superpixels_public/branches/auto_step/core/predict_mbest.cpp
+END
+F_GradientStats.h
+K 25
+svn:wc:ra_dav:version-url
+V 95
+/svn/lucchi/!svn/ver/3923/trunk/EM/superpixels_public/branches/auto_step/core/F_GradientStats.h
+END
+Slice3d.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/svn/lucchi/!svn/ver/4074/trunk/EM/superpixels_public/branches/auto_step/core/Slice3d.cpp
+END
+gi_ICM.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/svn/lucchi/!svn/ver/4023/trunk/EM/superpixels_public/branches/auto_step/core/gi_ICM.cpp
+END
+F_Bias.h
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/svn/lucchi/!svn/ver/4064/trunk/EM/superpixels_public/branches/auto_step/core/F_Bias.h
+END
+oSVM.h
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/svn/lucchi/!svn/ver/3923/trunk/EM/superpixels_public/branches/auto_step/core/oSVM.h
+END
+F_Filter.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/svn/lucchi/!svn/ver/4059/trunk/EM/superpixels_public/branches/auto_step/core/F_Filter.cpp
+END
+gi_maxflow.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/svn/lucchi/!svn/ver/4032/trunk/EM/superpixels_public/branches/auto_step/core/gi_maxflow.cpp
+END
+gi_sampling.h
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/svn/lucchi/!svn/ver/4023/trunk/EM/superpixels_public/branches/auto_step/core/gi_sampling.h
+END
+inference.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/svn/lucchi/!svn/ver/4066/trunk/EM/superpixels_public/branches/auto_step/core/inference.cpp
+END
+constraint_set.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 96
+/svn/lucchi/!svn/ver/4066/trunk/EM/superpixels_public/branches/auto_step/core/constraint_set.cpp
+END
+gi_multiobject.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 96
+/svn/lucchi/!svn/ver/4074/trunk/EM/superpixels_public/branches/auto_step/core/gi_multiobject.cpp
+END
+Feature.h
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/svn/lucchi/!svn/ver/3923/trunk/EM/superpixels_public/branches/auto_step/core/Feature.h
+END
+F_OrientedHistogram.h
+K 25
+svn:wc:ra_dav:version-url
+V 99
+/svn/lucchi/!svn/ver/3923/trunk/EM/superpixels_public/branches/auto_step/core/F_OrientedHistogram.h
+END
+F_Histogram.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 93
+/svn/lucchi/!svn/ver/3923/trunk/EM/superpixels_public/branches/auto_step/core/F_Histogram.cpp
+END
+F_Combo.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/svn/lucchi/!svn/ver/3924/trunk/EM/superpixels_public/branches/auto_step/core/F_Combo.cpp
+END
+utils.h
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/svn/lucchi/!svn/ver/4059/trunk/EM/superpixels_public/branches/auto_step/core/utils.h
+END
+gi_libDAI.h
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/svn/lucchi/!svn/ver/4023/trunk/EM/superpixels_public/branches/auto_step/core/gi_libDAI.h
+END
+gi_MRF.h
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/svn/lucchi/!svn/ver/4023/trunk/EM/superpixels_public/branches/auto_step/core/gi_MRF.h
+END
+gi_max.h
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/svn/lucchi/!svn/ver/4023/trunk/EM/superpixels_public/branches/auto_step/core/gi_max.h
+END
+energyParam.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 93
+/svn/lucchi/!svn/ver/4059/trunk/EM/superpixels_public/branches/auto_step/core/energyParam.cpp
+END
+Config.h
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/svn/lucchi/!svn/ver/4074/trunk/EM/superpixels_public/branches/auto_step/core/Config.h
+END
+train.c
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/svn/lucchi/!svn/ver/4071/trunk/EM/superpixels_public/branches/auto_step/core/train.c
+END
+Slice_P.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/svn/lucchi/!svn/ver/4059/trunk/EM/superpixels_public/branches/auto_step/core/Slice_P.cpp
+END
+oSVM.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/svn/lucchi/!svn/ver/3923/trunk/EM/superpixels_public/branches/auto_step/core/oSVM.cpp
+END
+F_Gaussian.h
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/svn/lucchi/!svn/ver/3923/trunk/EM/superpixels_public/branches/auto_step/core/F_Gaussian.h
+END
+F_OrientedHistogram.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 101
+/svn/lucchi/!svn/ver/3923/trunk/EM/superpixels_public/branches/auto_step/core/F_OrientedHistogram.cpp
+END
+gi_ICM.h
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/svn/lucchi/!svn/ver/4023/trunk/EM/superpixels_public/branches/auto_step/core/gi_ICM.h
+END
+utils.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/svn/lucchi/!svn/ver/4059/trunk/EM/superpixels_public/branches/auto_step/core/utils.cpp
+END
+StatModel.h
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/svn/lucchi/!svn/ver/4023/trunk/EM/superpixels_public/branches/auto_step/core/StatModel.h
+END
+F_Precomputed.h
+K 25
+svn:wc:ra_dav:version-url
+V 93
+/svn/lucchi/!svn/ver/3923/trunk/EM/superpixels_public/branches/auto_step/core/F_Precomputed.h
+END
+inference_globals.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 99
+/svn/lucchi/!svn/ver/3923/trunk/EM/superpixels_public/branches/auto_step/core/inference_globals.cpp
+END
+F_ColorHistogram.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 98
+/svn/lucchi/!svn/ver/3923/trunk/EM/superpixels_public/branches/auto_step/core/F_ColorHistogram.cpp
+END
+constraint_set.h
+K 25
+svn:wc:ra_dav:version-url
+V 94
+/svn/lucchi/!svn/ver/4066/trunk/EM/superpixels_public/branches/auto_step/core/constraint_set.h
+END
+gi_max.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/svn/lucchi/!svn/ver/4023/trunk/EM/superpixels_public/branches/auto_step/core/gi_max.cpp
+END
