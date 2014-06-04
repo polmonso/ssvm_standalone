@@ -57,6 +57,14 @@ make -j
 You can edit CMakeLists_common.txt or just change the flags with the ccmake interface.
 You might want to turn off some of the dependencies. Look at the USE_??? flags (you might need to toggle advanced mode pressing `t` key).
 
+Test volumes
+============
+
+You can download a test volume and config file from [dataset](https://documents.epfl.ch/groups/c/cv/cvlab-unit/www/data/%20ElectronMicroscopy_Hippocampus/volumedata.tif) and [config file](./sampledata/sample_config.txt). From the directory where the binaries are located, we would run:
+
+`train sample_config.txt`
+`predict -e
+
 Troubleshooting
 ===============
 

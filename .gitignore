@@ -1,3 +1,7 @@
+# data directories #
+####################
+testdata
+
 # build directories #
 #####################
 build
