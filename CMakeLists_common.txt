@@ -124,9 +124,12 @@ endif(USE_RAYS3D)
 if(USE_LIBDAI)
 set(LIBDAI_INCLUDE_DIRS ${SLICEME_DIR}/lib/libDAI024/include/ CACHE PATH "libdai include dir")
 include_directories(${LIBDAI_INCLUDE_DIRS})
-find_library(LIBDAI_LIBRARY NAMES dai PATHS "${SLICEME_DIR}/lib/libDAI024/build/" "${SLICEME_DIR}/lib/libDAI024/lib/" )
+find_library(LIBDAI_LIBRARY NAMES dai PATHS "${SLICEME_DIR}/lib/libDAI024/build/"
+                                            "${SLICEME_DIR}/lib/libDAI024/lib/"
+                                            "${SLICEME_DIR}/lib/libDAI024/build/Release/"
+                                            "${SLICEME_DIR}/lib/libDAI024/Release/")
+
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D USE_LIBDAI")
-message("libdai library: ${LIBDAI_LIBRARY}")
 endif(USE_LIBDAI)
 
 # MRF

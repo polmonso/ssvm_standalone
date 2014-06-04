@@ -2,18 +2,21 @@ Code structure
 ==============
 * core contains the core classes
 * lib contains the third party libraries used by the code
-* tests contains implementation of algorithms
-* tools contains different applications like SVM training, pixel/superpixel/supervoxel-based classification, graphcuts, ssvm...
-* roc contains scripts to generate ROCs from prediction files (those files contains probabilities for each node or edge)
+<!-- * tests contains implementation of algorithms -->
+<!-- * tools contains different applications like SVM training, pixel/superpixel/supervoxel-based classification, graphcuts, ssvm... -->
+<!-- * roc contains scripts to generate ROCs from prediction files (those files contains probabilities for each node or edge) -->
 
 Dependencies
 ============
 * opencv-dev
 * libsvm (modified to be multi-thread)
-* ITK (install with review flag ON)
+* ITK 3.20.1(install with review flag ON)
 * freeglut3-dev libglew1.5-dev libxmu-dev
 * sudo apt-get install g++ make cmake doxygen graphviz libboost-dev libboost-graph-dev libboost-program-options-dev
 * gnuplot
+
+Windows will have to at least download cmake-gui, opencv and boost.
+
 
 Provided Dependencies
 ---------------------
@@ -32,10 +35,15 @@ Install :
 
 1. Install the code in $LOCALHOME/src/EM/superpixels/ or $HOME/src/EM/superpixels/
 
-2. Compile third-party libraries :
-  1. Go to slic and type "cmake .; make"
-  2. Go to libDAI024 and type "cmake .; make"
-  3. ITK : Download from the web site and use ccmake to set review flag to ON.
+2. Compile third-party libraries (linux):
+  1. Go to slic/build and type `cmake .; make` (you might have to create the build directory)
+  2. Go to libDAI024/build and type `cmake ..; make`
+  3. ITK : Download version 3.20.1 from the web sitei and use `ccmake ..` to set review flag to ON. Then build
+
+2. Compile third-party libraries (windows):
+  1. Go to slic/build and type `cmake-gui ..` and then `MSBuild.exe supervoxel.sln /p:Configuratio=Release /m`
+  2. Go to libDAI024/build and type `cmake-gui ..`
+  3. ITK : Download version 3.20.1 from the web site and use `cmake-gui` to set review flag to ON. Then build.
 
 3. Main code
 
@@ -48,6 +56,11 @@ make -j
 
 You can edit CMakeLists_common.txt or just change the flags with the ccmake interface.
 You might want to turn off some of the dependencies. Look at the USE_??? flags (you might need to toggle advanced mode pressing `t` key).
+
+Troubleshooting
+===============
+
+On windows, when building slic/superpixels might give the error "No Target Architecture". Solve by adding the definition `SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /D_AMD64_")` to the CMakeLists.txt
 
 Deprecated instructions
 =======================
