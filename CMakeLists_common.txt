@@ -62,7 +62,16 @@ if(USE_ITK)
   set(CMAKE_CXX_FLAGS         "${CMAKE_CXX_FLAGS}   -D USE_ITK")
   set(ITK_DIR "/home/lucchi/src/ThirdParty/InsightToolkit-3.20.1/build" CACHE PATH "ITK build directory")
   message("ITK_DIR: ${ITK_DIR}")
+  set(ITK_AUX_DIR "${CMAKE_SOURCE_DIR}/lib/auxItk/" CACHE PATH "ITK auxiliar headers directory")
+  find_package(ITK REQUIRED)
+  IF(ITK_FOUND)
+    INCLUDE(${ITK_USE_FILE})
+  ELSE(ITK_FOUND)
+    message("itk not found")
+  ENDIF(ITK_FOUND)
+  include_directories(${ITK_AUX_DIR})
 endif(USE_ITK)
+
 
 if(USE_RAYS3D)
 set(CMAKE_CXX_FLAGS         "${CMAKE_CXX_FLAGS}   -D USE_RAYS3D -D RAYS_MULTITHREADING")
@@ -95,11 +104,6 @@ find_library(RAYS3D_LIBRARY NAMES rays3d PATHS ${SLICEME_DIR}/lib/rays3d/)
 find_package(ITK REQUIRED)
 endif(USE_RAYS3D)
 
-# ITK
-if(USE_ITK)
-find_package(ITK REQUIRED)
-endif(USE_ITK)
-
 ###################################################################### INCLUDES
 
 # include directories
@@ -111,28 +115,18 @@ include_directories(${SLICEME_DIR}/lib/slic/)
 # libsvm
 #include_directories(${SLICEME_DIR}/lib/libsvm-3.0)
 
-# ITK
-if(USE_ITK)
-IF(ITK_FOUND)
-  INCLUDE(${ITK_USE_FILE})
-ENDIF(ITK_FOUND)
-endif(USE_ITK)
-
 # 3d rays
 if(USE_RAYS3D)
 include_directories(${SLICEME_DIR}/lib/rays3d)
-# ITK
-IF(ITK_FOUND)
-  INCLUDE(${ITK_USE_FILE})
-ENDIF(ITK_FOUND)
 endif(USE_RAYS3D)
 
 # libDAI
 if(USE_LIBDAI)
-set(LIBDAI_INCLUDE_DIRS ${SLICEME_DIR}/lib/libDAI-0.2.4/include/ CACHE PATH "libdai include dir")
+set(LIBDAI_INCLUDE_DIRS ${SLICEME_DIR}/lib/libDAI024/include/ CACHE PATH "libdai include dir")
 include_directories(${LIBDAI_INCLUDE_DIRS})
-find_library(LIBDAI_LIBRARY NAMES dai PATHS ${SLICEME_DIR}/lib/libDAI-0.2.4/lib/)
+find_library(LIBDAI_LIBRARY NAMES dai PATHS "${SLICEME_DIR}/lib/libDAI024/build/" "${SLICEME_DIR}/lib/libDAI024/lib/" )
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D USE_LIBDAI")
+message("libdai library: ${LIBDAI_LIBRARY}")
 endif(USE_LIBDAI)
 
 # MRF
