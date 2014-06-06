@@ -85,9 +85,6 @@ Running the code
 5. Options :
 Make sure $LOCALHOME/src/EM/superpixels/config.txt is present. It contains some of the options to change for one database. For VOC, voc=1 should be set and voc=0 for MSRC.
 
----------------------------------------------------------------------------------
-
-
 bashrc :
 if [ `hostname` == 'cvlabpc44' ]; then
     export PATH=$PATH:~/src/EM/neurons/c++/bin:~/src/EM/Cpp/steerableFilters2D/bin:~/usr/bin/liblinear-1.33:~/bin/EM44:~/bin:~/src/EM/superpixels/lib/libsvm-3.0/
