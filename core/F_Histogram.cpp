@@ -35,9 +35,10 @@ F_Histogram::F_Histogram(int _nb_bins,
   }
 
   string config_tmp;
-  useColorImage = false;
   if(Config::Instance()->getParameter("use_color_image", config_tmp)) {
+    fprintf(stderr, "useColorImage %s", config_tmp.c_str());
     useColorImage = config_tmp.c_str()[0] == '1';
+    fprintf(stderr, "useColorImage %d", useColorImage);
   }
   else
     useColorImage = _useColorImage;

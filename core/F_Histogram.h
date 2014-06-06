@@ -44,7 +44,7 @@ class F_Histogram : public Feature
   F_Histogram(int _nb_bins,
               int _max_pixel_value,
               eHistogramType _histoType,
-              bool _useColorImage = true,
+              bool _useColorImage = false,
               IplImage* img = 0);
 
  protected:
