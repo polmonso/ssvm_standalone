@@ -62,8 +62,11 @@ Test volumes
 
 You can download a test volume and config file from [dataset](https://documents.epfl.ch/groups/c/cv/cvlab-unit/www/data/testdata.zip) and [config file](./sampledata/sample_config.txt). From the directory where the binaries are located, we would run:
 
-`train sample_config.txt`
-`predict -e
+`./train sample_config.txt`
+`./predict -c sample_config.txt -w parameter_vector0/iteration_400.txt -v 1 -g 12`
+`./predict -c sample_config.txt -w parameter_vector0/iteration_400.txt -v 1 -g 12 > output_predict.txt 2>&1`
+
+change the paths where images are located accordingly on the config to run the algorithm on your dataset.
 
 Troubleshooting
 ===============
