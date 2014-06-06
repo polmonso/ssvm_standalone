@@ -71,3 +71,4 @@ Troubleshooting
 On windows, when building slic/superpixels might give the error "No Target Architecture". Solve by adding the definition `SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /D_AMD64_")` to the CMakeLists.txt
 
 
+
