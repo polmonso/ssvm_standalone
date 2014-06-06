@@ -854,7 +854,7 @@ void Slice3d::loadFromDir(const char* dir, const node& start, const node& end)
 	  }
 	  cv::Mat cvimg_slice = cv::imread(filePath.c_str(),CV_LOAD_IMAGE_GRAYSCALE);
       IplImage* img_slice = cvLoadImage(filePath.c_str(),0);
-	  cvWaitKey(0);
+
       if(!img_slice){
 		  fprintf(stderr,"not loaded\n");
 		  continue;
