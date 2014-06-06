@@ -36,7 +36,8 @@ void train(char* config);
 int main (int argc, char* argv[])
 {
   if(argc < 2){
-    fprintf(stderr,"Missing configuration file argument\n");
+    fprintf(stderr, "Missing configuration file argument\n");
+    fprintf(stderr, "Usage: train configuration_file\n");
     return EXIT_FAILURE;
   }
   train(argv[1]);
@@ -85,7 +86,7 @@ void train(char* config)
     exit(EXIT_FAILURE);
 
   clock_t t = clock() - time_0;
-  printf("[main] Running time = %ld clocks = %f s\n", t, t/(float)CLOCKS_PER_SEC);
+  printf("[main] Running time = %ld clocks = %f s\n", t, t/(float)CLOCKS_PER_SEC); fflush(stdout);
 
 
   /* Warning: The model contains references to the original data 'docs'.

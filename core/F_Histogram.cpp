@@ -34,15 +34,13 @@ F_Histogram::F_Histogram(int _nb_bins,
     nBins = nBinsPerSupernode;
   }
 
-  string param = Config::Instance()->parameters["use_color_image"];
-  if(param == "1") {
-    useColorImage = true;
-  } else {
-    if(param == "0")
-      useColorImage = false;
-    else
-      useColorImage = _useColorImage;
+  string config_tmp;
+  useColorImage = false;
+  if(Config::Instance()->getParameter("use_color_image", config_tmp)) {
+    useColorImage = config_tmp.c_str()[0] == '1';
   }
+  else
+    useColorImage = _useColorImage;
 
   if(useColorImage)
     nChannels = 3;

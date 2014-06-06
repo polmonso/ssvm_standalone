@@ -28,7 +28,6 @@
 #include "itkSmoothingRecursiveGaussianImageFilter.h"
 #include "itkThresholdImageFilter.h"
 #include "itkGradientRecursiveGaussianImageFilter.h"
-//#include "itkPercentileRescaleIntensityImageFilter.h"
 #include "itkImageFileWriter.h"
 
 //------------------------------------------------------------------------------
@@ -44,16 +43,8 @@ static const int nDim = 3;
 static const int numFeatures = 4;
 
 // Use 7 scales
-//static const int numScales = 7;
-//static const double scales[numScales] = {1.0, 1.414, 2, 2.828, 4, 5.656, 8};
-//static const int numScales = 10;
-//static const double scales[numScales] = {0.354, 0.5, 0.707, 1.0, 1.414, 2, 2.828, 4, 5.656, 8};
-
-static const int numScales = 6;
-static const double scales[numScales] = {0.25, 0.5, 1, 2, 4, 8};
-
-//static const int numScales = 5;
-//static const double scales[numScales] = {0.5, 1.0, 1.6, 3.5, 5.0};
+static const int numScales = 7;
+static const double scales[numScales] = {1.0, 1.414, 2, 2.828, 4, 5.656, 8};
 
 static const int channelCounts[numFeatures] = {1, 1, nDim, nDim};
 

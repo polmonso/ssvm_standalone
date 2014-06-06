@@ -120,7 +120,9 @@ extern int DEFAULT_LONG_RANGE_EDGES_DISTANCE;
 
 //-----------------------------------------------------------------------------
 
-//FIXME : this should be  255 ?
+#define DEFAULT_FEATURE_TYPE (F_HISTOGRAM | F_FILTER | F_BIAS)
+//#define DEFAULT_FEATURE_TYPE (F_HISTOGRAM | F_FILTER)
+
 #define MAX_PIXEL_VALUE 256
 #define NB_BINS 10
 

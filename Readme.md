@@ -70,35 +70,4 @@ Troubleshooting
 
 On windows, when building slic/superpixels might give the error "No Target Architecture". Solve by adding the definition `SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /D_AMD64_")` to the CMakeLists.txt
 
-Deprecated instructions
-=======================
-
-4. Tools
-41. Go to tools/whatevertoolyouwant/ and type "cmake .; make"
-
-SSVM
-For ssvm, edit svm_struct_globals.h and change NTHREADS
-Running the code
-- Check folders "groundTruth" and "predictionLabels" and make sure the images look OK.
-- The code will output results every 10 iterations or every time it updates the C value.
-
-5. Options :
-Make sure $LOCALHOME/src/EM/superpixels/config.txt is present. It contains some of the options to change for one database. For VOC, voc=1 should be set and voc=0 for MSRC.
-
----------------------------------------------------------------------------------
-
-
-bashrc :
-if [ `hostname` == 'cvlabpc44' ]; then
-    export PATH=$PATH:~/src/EM/neurons/c++/bin:~/src/EM/Cpp/steerableFilters2D/bin:~/usr/bin/liblinear-1.33:~/bin/EM44:~/bin:~/src/EM/superpixels/lib/libsvm-3.0/
-    export LOCALHOME=/localhome/aurelien/
-    export OMP_NUM_THREADS=16
-elif [ `hostname` == 'cvlabpc45' ]; then
-    export PATH=$PATH:~/src/EM/neurons/c++/bin:~/src/EM/Cpp/steerableFilters2D/bin:~/usr/bin/liblinear-1.33:~/bin/EM45:~/bin:~/src/EM/superpixels/lib/libsvm-3.0/
-    export LOCALHOME=/localhome/aurelien/
-    export OMP_NUM_THREADS=16
-else
-    export PATH=$PATH:~/src/EM/neurons/c++/bin:~/src/EM/Cpp/steerableFilters2D/bin:~/usr/bin/liblinear-1.33:~/bin/EM:~/bin:~/src/EM/superpixels/lib/libsvm-3.0/
-    export OMP_NUM_THREADS=8
-fi
 

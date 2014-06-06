@@ -12,59 +12,10 @@
 // Contact <aurelien.lucchi@gmail.com> for comments & bug reports      //
 /////////////////////////////////////////////////////////////////////////
 
-#include "F_ColorHistogram.h"
 #include "F_Combo.h"
-#include "F_Gaussian.h"
-#include "F_Histogram.h"
 #include "oSVM.h"
 
-#ifdef USE_ITK
-#include "F_GradientStats.h"
-#endif
-
-
 //--------------------------------------------------------------------- METHODS
-
-/*
-// AL28
-F_Combo::F_Combo(vector<eFeatureType>& feature_types,
-                 const char* image_name)
-{
-  init();
-  Feature* _feature = 0;
-  for(vector<eFeatureType>::iterator it = feature_types.begin();
-      it != feature_types.end(); it++) {
-    _feature = Feature::getFeature(image_name,*it);
-    features.push_back(_feature);
-  }
-
-  // Initialize feature vectors
-  printf("[F_Combo] Allocating memory to store %ld different features\n", features.size());
-  feature_buffer = new osvm_node*[features.size()];
-
-  uint fidx = 0;
-  for(vector<Feature*>::iterator iFeature = features.begin();
-      iFeature != features.end(); iFeature++) {
-    int max_index = (*iFeature)->getSizeFeatureVectorForOneSupernode()+1;
-    feature_buffer[fidx] = new osvm_node[max_index];
-
-    printf("[F_Combo] max_index %d\n", max_index);
-
-    int i = 0;
-    for(i = 0;i < max_index-1; i++)
-      feature_buffer[fidx][i].index = i+1;
-    feature_buffer[fidx][i].index = -1;
-
-    ++fidx;
-  }
-
-  sizeFV = 0;
-  for(vector<Feature*>::iterator iFeature = features.begin();
-      iFeature != features.end(); iFeature++) {
-    sizeFV += (*iFeature)->getSizeFeatureVectorForOneSupernode();
-  }
-}
-*/
 
 F_Combo::F_Combo(vector<eFeatureType>& feature_types,
                  Slice* slice)

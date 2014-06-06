@@ -29,9 +29,6 @@ typedef float edgeCoeffType;
 
 //------------------------------------------------------------------------------
 
-// comment next line to disable MSRC!!
-//#define DEBUG_MSRC 1
-
 // set this to 1 to lear an offset for each class
 // comment line to deactivate offset (do not set to 0)
 #define W_OFFSET 0

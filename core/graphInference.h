@@ -109,92 +109,6 @@ class GraphInference
     double p = 0;
     osvm_node *n = slice->getFeature(sid);
 
-
-#if DEBUG_MSRC
-
-#if USE_SPARSE_VECTORS
-
-    //static int ncall = 0;
-
-    if(label < 21) {
-      // code to weight combination of features + SVM predictions
-      // use one weight per feature dimension, except for SVM predictions
-      // for which we use one weight per scale.
-      int fvSize = slice->getFeatureSize(sid);
-      int fvSize_predictions = 21*param->nScales;
-      int last_feature_idx = fvSize - fvSize_predictions;
-      int inc = n[0].index;
-      int widx = SVM_FEAT_INDEX(param, label, inc - 1);
-      //if(sid == 100 && ncall > 16)
-      //  printf("[graphInference] ncall %d s 0 label %d %d %d\n", ncall, label, inc, widx, n[0].value);
-      for(int s = 0; s < last_feature_idx; s++) {
-        p += n[s].value*smw[widx];
-        //if(isinf(p) || isnan(p)) {
-        //  printf("[graphInference] computeUnary %d %d %g %g\n", s, widx, n[s].value,smw[widx]);
-        //}
-        //if(sid == 100 && ncall > 16)
-        //  printf("[graphInference] ncall %d s %d label %d %d %d %d %d %g %g %g\n", ncall, s, label, n[s+1].index, n[s].index, inc, widx, n[s].value, smw[widx], p);
-        inc = n[s+1].index - n[s].index;
-        widx += inc*SVM_FEAT_NUM_CLASSES(param);
-      }
-
-      /*
-      if(sid == 100 && ncall > 16) {
-        printf("[graphInference] ncall %d label %d %g\n", ncall, label, p);
-        int s = fvSize - (21*1);
-        printf("[graphInference] ncall %d label %d %d %d\n", ncall, label, fvSize, s);
-      }
-      */
-
-      // add svm prediction
-      int fvSize_full = slice->getFeatureSize();
-      for(int l = 1; l <= param->nScales; ++l) {
-        int s = fvSize - (21*l) + label;
-        int w_idx = SVM_FEAT_INDEX(param, 0, fvSize_full - (21*l));
-        p += n[s].value*smw[w_idx];
-        //if(sid == 100 && ncall > 16)
-        //  printf("[graphInference] ncall %d s2 %d label %d %d %d %g %g %g\n", ncall, s, label, w_idx, fvSize_full, n[s].value, smw[w_idx], p);
-      }
-
-    }
-
-#else
-
-    if(label < 21) {
-      // code to weight combination of features + SVM predictions
-      // use one weight per feature dimension, except for SVM predictions
-      // for which we use one weight per scale.
-      int fvSize = slice->getFeatureSize();
-      int widx = SVM_FEAT_INDEX(param, label, 0);
-      int fvSize_predictions = 21*param->nScales;
-      //printf("fvSize %d %d\n", fvSize, fvSize_predictions);
-      for(int s = 0; s < fvSize - fvSize_predictions; s++) {
-        p += n[s].value*smw[widx];
-        if(isinf(p) || isnan(p)) {
-          printf("[graphInference] computeUnary %d %d %g %g\n", s, widx, n[s].value,smw[widx]);
-          exit(-1);
-        }
-        widx += SVM_FEAT_NUM_CLASSES(param);
-      }
-      for(int l = 1; l <= param->nScales; ++l) {
-        //printf("l %d\n", l);
-        int s = fvSize - (21*l) + label;
-        int w_idx = SVM_FEAT_INDEX(param, 0, fvSize - (21*l));
-        p += n[s].value*smw[w_idx];
-        //if(isinf(p) || isnan(p)) {
-        //  printf("[graphInference] computeUnary %d %d %g %g\n", s, widx, n[s].value,smw[widx]);
-        //}
-      }
-    }
-
-#endif
-
-#ifdef W_OFFSET
-    p += smw[label];
-#endif
-
-#else
-
 #if USE_SPARSE_VECTORS
     assert(0);
     // To be implemented...
@@ -215,8 +129,6 @@ class GraphInference
 
 #ifdef W_OFFSET
     p += smw[label];
-#endif
-
 #endif
 
     return p;

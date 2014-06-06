@@ -2760,7 +2760,7 @@ void zipAndDeleteCube(const char* cubeName)
   fclose(zip);
   */
 
-  if(ret == 0) {
+  if(ret == Z_OK) {
     // delete original file
     if( remove(cubeName_in.c_str()) != 0 ) {
       printf("[utils] Warning: Could not delete %s\n", cubeName_in.c_str());

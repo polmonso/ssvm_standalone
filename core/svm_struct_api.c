@@ -156,7 +156,7 @@ bool useMSRC = false;
 bool useSlice3d = true;
 bool use01Loss = false;
 bool generateFirstConstraint = false;
-bool useGCForSubModularEnergy = false;
+bool useGCForSubModularEnergy = true;
 bool predictTrainingImages = true;
 int nParallelChains = 12;
 
@@ -199,7 +199,7 @@ void computeLoss(LABEL& y, labelType* ybar, const STRUCT_LEARN_PARM *sparm,
       for(int n = 0; n < y.nNodes; n++) {
         if(y.nodeLabels[n] != ybar[n]) {
           if(sparm->loss_function == LOSS_NODE_BASED) {
-            assert(sparm->lossPerLabel[n]>=0);
+          assert(sparm->lossPerLabel[n]>=0);
             loss += (*y.nodeCoeffs)[n]*sparm->lossPerLabel[n];
           } else {
             assert(sparm->lossPerLabel[y.nodeLabels[n]]>=0);
@@ -437,11 +437,6 @@ SWORD* computePsi(SWORD* words, SPATTERN x, LABEL y, const STRUCTMODEL *sm,
 
   int fvSize = x.feature->getSizeFeatureVector();
 
-#if DEBUG_MSRC
-  int fvSize_predictions = 21*sparm->nScales;
-#endif
-
-
   // local nodes
   int label;
   int featIdx = 0;
@@ -468,97 +463,6 @@ SWORD* computePsi(SWORD* words, SPATTERN x, LABEL y, const STRUCTMODEL *sm,
     
     osvm_node *n = x.slice->getFeature(sid);    
 
-
-#if DEBUG_MSRC
-
-#if USE_SPARSE_VECTORS
-
-    if(label < 21) {
-      
-      // code to weight combination of features + SVM predictions
-      // use one weight per feature dimension, except for SVM predictions
-      // for which we use one weight per scale.
-      int fvSize = x.slice->getFeatureSize(sid);
-      int fvSize_predictions = 21*sparm->nScales;
-      int last_feature_idx = fvSize - fvSize_predictions;
-      int inc = n[0].index;
-      int featIdx = SVM_FEAT_INDEX(sparm, label, inc - 1);
-      //printf("[svm_struct] s 0 %d %d\n", inc, featIdx);
-      for(int s = 0; s < last_feature_idx; s++) {
-        if(featIdx >= sm->sizePsi) {
-          printf("featIdx>=sm->sizePsi %d %d %d %d %d %d %ld\n",featIdx,label,T_FOREGROUND,sparm->nUnaryWeights,s,fvSize,sm->sizePsi);
-          exit(-1);
-        }
-        if(x.nodeCoeffs) {
-          feats[featIdx] += (*x.nodeCoeffs)[sid]*n[s].value;
-        } else {
-          feats[featIdx] += n[s].value;
-        }
-
-        inc = n[s+1].index - n[s].index;
-        featIdx += inc*SVM_FEAT_NUM_CLASSES(sparm);
-        //printf("[svm_struct] s %d %d %d %d %d\n", s, n[s+1].index, n[s].index, inc, featIdx);
-      }
-
-      int fvSize_full = x.slice->getFeatureSize();
-      for(int l = 1; l <= sparm->nScales; ++l) {
-        int s = fvSize - (21*l) + label;
-        // use same weight for the last 21 elements
-        featIdx = SVM_FEAT_INDEX(sparm, 0, fvSize_full - (21*l));
-        if(featIdx >= sm->sizePsi) {
-          printf("featIdx>=sm->sizePsi %d %d %d %d %d %d %ld\n",featIdx,label,T_FOREGROUND,sparm->nUnaryWeights,s,fvSize,sm->sizePsi);
-          exit(-1);
-        }
-        if(x.nodeCoeffs) {
-          feats[featIdx] += (*x.nodeCoeffs)[sid]*n[s].value;
-        } else {
-          feats[featIdx] += n[s].value;
-        }
-      }
-    }
-
-#else
-    if(label < 21) {
-      
-      // code to weight combination of features + SVM predictions
-      // use one weight per feature dimension, except for SVM predictions
-      // for which we use one weight per scale.
-      for(int s = 0; s < fvSize - fvSize_predictions; s++) {
-        featIdx = SVM_FEAT_INDEX(sparm, label,s);
-        if(featIdx >= sm->sizePsi) {
-          printf("featIdx>=sm->sizePsi %d %d %d %d %d %d %ld\n",featIdx,label,T_FOREGROUND,sparm->nUnaryWeights,s,fvSize,sm->sizePsi);
-          exit(-1);
-        }
-        assert(s+1 == n[s].index);
-        if(x.nodeCoeffs) {
-          feats[featIdx] += (*x.nodeCoeffs)[sid]*n[s].value;
-        } else {
-          feats[featIdx] += n[s].value;
-        }
-      }
-      for(int l = 1; l <= sparm->nScales; ++l) {
-        int s = fvSize - (21*l) + label;
-        // use same weight for the last 21 elements
-        featIdx = SVM_FEAT_INDEX(sparm, 0, fvSize - (21*l));
-        if(featIdx >= sm->sizePsi) {
-          printf("featIdx>=sm->sizePsi %d %d %d %d %d %d %ld\n",featIdx,label,T_FOREGROUND,sparm->nUnaryWeights,s,fvSize,sm->sizePsi);
-          exit(-1);
-        }
-        assert(s+1 == n[s].index);
-        if(x.nodeCoeffs) {
-          feats[featIdx] += (*x.nodeCoeffs)[sid]*n[s].value;
-        } else {
-          feats[featIdx] += n[s].value;
-        }
-      }
-
-    }
-
-#endif // USE_SPARSE_VECTORS
-
-#else
-
-
 #if USE_SPARSE_VECTORS
     assert(0); // TODO...
 #endif
@@ -576,8 +480,6 @@ SWORD* computePsi(SWORD* words, SPATTERN x, LABEL y, const STRUCTMODEL *sm,
         feats[featIdx] += n[s].value;
       }
     }
-
-#endif
 
   }
   
@@ -1157,11 +1059,11 @@ std::cerr << "image dir" << imageDir << std::endl;
   
   // Load features
   vector<eFeatureType> feature_types;
-  int paramFeatureTypes = 0;
+  int paramFeatureTypes = DEFAULT_FEATURE_TYPE;
   if(config->getParameter("featureTypes", config_tmp)) {
     paramFeatureTypes = atoi(config_tmp.c_str());
-    getFeatureTypes(paramFeatureTypes, feature_types);
   }
+  getFeatureTypes(paramFeatureTypes, feature_types);
   
   string featureDir;
   if(Config::Instance()->getParameter("featureDir", config_tmp)) {
@@ -1353,23 +1255,6 @@ std::cerr << "image dir" << imageDir << std::endl;
     PRINT_MESSAGE("[SVM_struct] Saving ground truth overlay to %s\n", soutOverlayImageGT.str().c_str());
     slice3d->exportOverlay(soutOverlayImageGT.str().c_str(), examples[idx].y.nodeLabels);
 
-    /*
-    {
-      // temp: export file with labels for Pen
-    stringstream soutSupernodeLabels;
-    soutSupernodeLabels << groundtruthDir;
-    soutSupernodeLabels << slice3d->getName();
-    soutSupernodeLabels << ".txt";
-    SSVM_PRINT("[SVM_struct] Saving ground truth labels to %s\n",
-               soutSupernodeLabels.str().c_str());
-
-    printf("Export to %s with %s\n", soutSupernodeLabels.str().c_str(), maskDir.c_str());
-    slice3d->exportSupernodeLabelQualityFile(soutSupernodeLabels.str().c_str(),
-                                             maskDir.c_str(), sparm->nClasses);
-
-    }
-    */
-
 #endif
   } else {
     examples[idx].y.nNodes = 0;
@@ -1471,11 +1356,11 @@ void load_2d_dataset(string imageDir,
                              superpixelLabels.str().c_str());
     // Load features
     vector<eFeatureType> feature_types;
-    int paramFeatureTypes = 0;
+    int paramFeatureTypes = DEFAULT_FEATURE_TYPE;
     if(config->getParameter("featureTypes", config_tmp)) {
       paramFeatureTypes = atoi(config_tmp.c_str());
-      getFeatureTypes(paramFeatureTypes, feature_types);
     }
+    getFeatureTypes(paramFeatureTypes, feature_types);
     Feature* feature = Feature::getFeature(slice, feature_types);
     if(paramFeatureTypes & F_LOADFROMFILE) {
       F_LoadFromFile* fLoadFromFile = 0;
@@ -1790,6 +1675,18 @@ void load_learn_parm(STRUCT_LEARN_PARM *sparm, Config* config)
              label, classIdx, (int)r, (int)g, (int)b);
     }
     ifsCol.close();
+  } else {
+    SSVM_PRINT("[SVM_struct] Generating random colormap\n");
+    srand(time(NULL));
+
+    for(int label = 0; label < sparm->nClasses; ++label) {
+      uchar r = (uchar)(rand()*255.0 / (double)RAND_MAX);
+      uchar g = (uchar)(rand()*255.0 / (double)RAND_MAX);
+      uchar b = (uchar)(rand()*255.0 / (double)RAND_MAX);
+      ulong classIdx = RGBToclassIdx(r, g, b);
+      sparm->classIdxToLabel[classIdx] = label;
+      sparm->labelToClassIdx[(labelType)label] = classIdx;
+    }
   }
 
   sparm->useSymmetricWeights = true;
@@ -1964,7 +1861,7 @@ SAMPLE      read_struct_examples(char *file, STRUCT_LEARN_PARM *sparm)
   SSVM_PRINT("[SVM_struct] metric_type = %d\n", sparm->metric_type);
 
   // feature type
-  int paramFeatureTypes = F_HISTOGRAM | F_FILTER | F_BIAS;
+  int paramFeatureTypes = DEFAULT_FEATURE_TYPE;
   vector<eFeatureType> feature_types;
   if(Config::Instance()->getParameter("featureTypes", config_tmp)) {
     paramFeatureTypes = atoi(config_tmp.c_str());
@@ -2129,10 +2026,6 @@ SAMPLE      read_struct_examples(char *file, STRUCT_LEARN_PARM *sparm)
 
 #if USE_LONG_RANGE_EDGES
   printf("[svm_struct] USE_LONG_RANGE_EDGES is ON\n");
-#endif
-
-#if DEBUG_MSRC
-  printf("DEBUG_MSRC is on\n");
 #endif
 
   time_0 = clock();
@@ -2397,24 +2290,6 @@ LABEL       find_most_violated_constraint_marginrescaling(SPATTERN x, LABEL y,
         ybar.nodeLabels[n] = rand() % sparm->nClasses;
       }
     }
-
-    /*
-    if(useSlice3d) {
-      // generate noisy pattern
-      int label = 0;
-      for(int n = 0; n < ybar.nNodes; ++n) {
-        ybar.nodeLabels[n] = label;
-        label = 1 - label;
-      }
-    } else {
-      // generate random pattern
-      srand(time(NULL));
-      for(int n = 0; n < ybar.nNodes; ++n) {
-        ybar.nodeLabels[n] = rand() % sparm->nClasses;
-      }
-    }
-    */
-
   } else {
     runInference(x, y, sm, sparm, ybar, threadId, labelFound, cacheId);
   }

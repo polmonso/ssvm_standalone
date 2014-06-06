@@ -181,8 +181,6 @@ void F_LoadFromFile::loadSupervoxelBasedFeaturesFromTIF(Slice3d& slice3d,
 #if OUTPUT_FEATURES_TO_TXT_FILE
           ofsFeat << (double) value << endl;
 #endif          
-          //printf("f %ld %d %d %d %d\n",idx,(int)value,*itNode,fileId,(int)features[*itNode][fileId]);
-          //nodeId++;
         }
       delete inputCube;
 
@@ -1064,7 +1062,6 @@ void F_LoadFromFile::loadTextFeatures(Slice_P& slice,
         for(uint i = 0; i < featureSizePerFile; ++i) {
           features[sid][featIdx+i] = 0;
         }
-        //for(uint i = 0; i < tokens.size()-1; ++i) {
         for(uint i = 0; i < featureSizePerFile; ++i) {
           string field = tokens[i+label_offset];
           size_t index_ch = field.find(FEATURE_FIELD_SEPARATOR);

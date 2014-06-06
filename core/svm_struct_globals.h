@@ -5,7 +5,7 @@
 // 2=output inference images
 // 3=output groundtruth images + images for most violated constraints at each iteration
 // 4=output psiGT and psiMVC files
-#define VERBOSITY 4
+#define VERBOSITY 1
 
 #define SSVM_VERBOSE 1
 #define SSVM_PRINT(format, ...) if(SSVM_VERBOSE) fprintf (stderr, format, ## __VA_ARGS__)

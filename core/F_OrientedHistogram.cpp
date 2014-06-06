@@ -42,17 +42,6 @@ bool F_OrientedHistogram::getFeatureVector(osvm_node *x, Slice3d* slice3d, int s
   float v2[3];
   float v2p[3];
 
-  /*
-  float n1;
-  floatn2;
-  float fCos = 0;
-  float fSin = 0;
-  int angle;
-  float vc[3]; // cross product(v1,v2)
-  */
-
-  //float vn[3]; // vector perpendicular to v1
-  //float vn2[3]; // second vector perpendicular to v1
   // B=(v1,vn,vn2) basis used to project vectors
   float B[9];
   int angleXY;
