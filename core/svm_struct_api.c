@@ -3803,7 +3803,7 @@ void finalize()
   */
 
   stringstream src_filename;
-  src_filename << "cp parameter_vector0/iteration_";
+  src_filename << "parameter_vector0/iteration_";
   src_filename << best_idx;
   src_filename << ".txt ";
   SSVM_PRINT("[svm_struct] Copying %s to %s\n",
