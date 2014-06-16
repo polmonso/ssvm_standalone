@@ -2,7 +2,8 @@ cmake_minimum_required(VERSION 2.4)
 
 PROJECT(sliceMe)
 
-set(SLICEME_DIR ${CMAKE_SOURCE_DIR})
+#set(SLICEME_DIR ${CMAKE_SOURCE_DIR})
+set(SLICEME_DIR ${PROJECT_SOURCE_DIR})
 
 include(CMakeLists_common.txt)
 
