@@ -82,12 +82,6 @@ set(OpenCV_DIR "~/src/ThirdParty/OpenCV-2.4.2/" CACHE PATH "OpenCV root dir")
 FIND_PACKAGE(OpenCV REQUIRED)
 # add include directories
 include_directories(${OPENCV_INCLUDE_DIR})
-#find_library(ML_LIBRARY NAMES opencv_ml PATHS ${OpenCV_DIR}/lib/)
-#find_library(ML_LIBRARY NAMES ml PATHS ${OpenCV_DIR}/lib/)
-#SET(OpenCV_LIBS ${OpenCV_LIBS} ${ML_LIBRARY})
-message("OpenCV")
-message(STATUS ${OpenCV_LIBS})
-message(STATUS ${OpenCV_LIBRARIES})
 SET(OpenCV_LIBS ${OpenCV_LIBRARIES})
 
 #Superpixel library
