@@ -3,6 +3,7 @@ cmake_policy(SET CMP0012 NEW)
 #cmake_policy(SET CMP0003 NEW)
 
 INCLUDE_REGULAR_EXPRESSION("^.*$")
+message(STATUS "sliceme dir2 ${SLICEME_DIR}")
 
 EXECUTE_PROCESS(
 COMMAND "hostname"
@@ -55,8 +56,8 @@ endif()
 if(USE_ITK)
   set(CMAKE_CXX_FLAGS         "${CMAKE_CXX_FLAGS}   -D USE_ITK")
   #set(ITK_DIR "/home/lucchi/src/ThirdParty/InsightToolkit-3.20.1/build" CACHE PATH "ITK build directory")
-  message("ITK_AUX_DIR: ${ITK_AUX_DIR} ITK_DIR: ${ITK_DIR}")
   set(ITK_AUX_DIR "${SLICEME_DIR}/lib/auxItk/" CACHE PATH "ITK auxiliar headers directory")
+  message("ITK_AUX_DIR: ${ITK_AUX_DIR} ITK_DIR: ${ITK_DIR}")
   find_package(ITK REQUIRED)
   IF(ITK_FOUND)
     INCLUDE(${ITK_USE_FILE})
@@ -97,6 +98,7 @@ endif(USE_RAYS3D)
 
 # include directories
 include_directories(${SLICEME_DIR}/core/)
+message(STATUS "including directory ${SLICEME_DIR}/core/")
 
 # superpixel/supervoxel library
 include_directories(${SLICEME_DIR}/lib/slic/)

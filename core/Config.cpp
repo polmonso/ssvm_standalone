@@ -89,7 +89,7 @@ bool Config::readConfigFile(string filename)
     }
     else 
     {
-        fprintf(stderr,"[Config] Error while loading parameter from config file %s\n",filename.c_str());
+        fprintf(stderr,"[Config] Error while loading parameter from config file %s. Aborting read.\n",filename.c_str());
         return false;
     }
   }
@@ -143,6 +143,7 @@ bool Config::getParameter(string parameterName, string& parameterValue)
     parameterValue = iParam->second;
     retValue = true;
   } else {
+    //TODO maybe it's better to set it to default when possible. For example through a static config map.
     parameterValue = "";
   }
   return retValue;

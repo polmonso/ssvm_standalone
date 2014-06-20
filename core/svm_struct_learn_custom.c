@@ -463,8 +463,14 @@ void exportLabels(STRUCT_LEARN_PARM *sparm, EXAMPLE* ex,
                   LABEL* y, const char* dir_name)
 {
   string paramSlice3d;
-  Config::Instance()->getParameter("slice3d", paramSlice3d);
-  bool useSlice3d = paramSlice3d.c_str()[0] == '1';
+  bool useSlice3d;
+  if(!Config::Instance()->getParameter("slice3d", paramSlice3d)){
+      //parameter is not set, use default.
+      useSlice3d = true;
+  } else {
+    useSlice3d = paramSlice3d.c_str()[0] == '1';
+  }
+
   string paramVOC;
   Config::Instance()->getParameter("voc", paramVOC);
   bool useVOC = paramVOC.c_str()[0] == '1';

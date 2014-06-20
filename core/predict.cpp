@@ -247,8 +247,10 @@ void create_average_weigth_vector(const char* input_dir, const char* output_file
   avg_param.save(output_file);
 }
 
-int main(int argc,char* argv[])
-{
+bool predict(int argc, char *argv[]) {
+
+  std::cout << "Starting prediction" << std::endl;
+
   args.image_dir = 0;
   args.mask_dir = (char*)"";
   args.nImages = -1;
@@ -272,14 +274,14 @@ int main(int argc,char* argv[])
 
   if(argc < 2){
      fprintf(stderr, "Insufficient number of arguments. Missing configuration and model file.\n Example: predict -c config.txt -w model.txt\n usage with -h");
-     exit(EXIT_FAILURE);
+     return false;
   }
 
   while((key = getopt_long(argc, argv, "ac:g:i:k:l:m:n:o:s:t:vw:y:h", long_options, &option_index)) != -1){
       parsing_output = parse_opt(key, optarg, &args);
       if(parsing_output == -1){
           fprintf(stderr, "Wrong argument. Parsing failed.");
-          exit(EXIT_FAILURE);
+          return false;
       }
   } 
 
@@ -310,7 +312,7 @@ int main(int argc,char* argv[])
   }
 
   vector<eFeatureType> feature_types;
-  int paramFeatureTypes = 0;
+  int paramFeatureTypes = DEFAULT_FEATURE_TYPE;
   if(config->getParameter("featureTypes", config_tmp)) {
     paramFeatureTypes = atoi(config_tmp.c_str());
     getFeatureTypes(paramFeatureTypes, feature_types);
@@ -362,7 +364,10 @@ int main(int argc,char* argv[])
   }
 
   string colormapFilename;
-  getColormapName(colormapFilename);
+  if(getColormapName(colormapFilename) < 0){
+      //FIXME notify client reading the colormap failed.
+      return false;
+  }
   printf("[Main] Colormap=%s\n", colormapFilename.c_str());
   map<labelType, ulong> labelToClassIdx;
   getLabelToClassMap(colormapFilename.c_str(), labelToClassIdx);
@@ -397,6 +402,7 @@ int main(int argc,char* argv[])
                  compress_image,
                  args.overlay_dir,
                  METRIC_SUPERNODE_BASED_01);
+    fflush(stdout);
 
     if(args.export_all) {
 
@@ -435,6 +441,7 @@ int main(int argc,char* argv[])
                                               lossPerLabel,
                                               feature,
                                               0, 0);
+      fflush(stdout);
 
       int nNodes = slice->getNbSupernodes();
       float* marginals = new float[nNodes];
@@ -458,5 +465,16 @@ int main(int argc,char* argv[])
 
   SSVM_PRINT("[Main] Cleaning\n");
   SSVM_PRINT("[Main] Done\n");
-  return 0;
+  return true;
 }
+
+int main(int argc,char* argv[]) {
+
+    if(predict(argc, argv) == false)
+        exit(EXIT_FAILURE);
+
+    printf("[Main] Cleaning\n");
+    printf("[Main] Done\n");
+    return 0;
+}
+

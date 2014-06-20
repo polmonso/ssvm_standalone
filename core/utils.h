@@ -373,7 +373,7 @@ ulong getFeatureTypeId(const vector<eFeatureType>& feature_types);
 
 void set_default_parameters(Config* config);
 
-void getColormapName(string& paramColormap);
+int getColormapName(string& paramColormap);
 
 void loadData(string imageDir, string maskDir, Config* config, Slice_P*& slice);
 

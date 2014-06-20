@@ -2,16 +2,16 @@ cmake_minimum_required(VERSION 2.4)
 
 PROJECT(dai C CXX)
 
+option(BUILD_SHARED_LIBS "Build shared libraries instead of static ones" true)
+
 if(WIN32)
-        message(STATUS "flags ${CMAKE_CXX_FLAGS}")
     SET(CMAKE_CXX_FLAGS "/DWIN32 /D_WINDOWS /DWINDOWS /DNOMINMAX /w /EHsc /GR /MP /openmp ")
-        message(STATUS "flags ${CMAKE_CXX_FLAGS}")
     SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /D_AMD64_ ")
 elseif(APPLE)
     SET(CMAKE_CXX_FLAGS "-Wall -O3")
 elseif(UNIX)
-    set(CMAKE_CXX_FLAGS         "${CMAKE_CXX_FLAGS} -fopenmp")
-    set(CMAKE_CXX_FLAGS         "${CMAKE_CXX_FLAGS} -g -pg")
+    set(CMAKE_CXX_FLAGS         "${CMAKE_CXX_FLAGS} -fPIC -fopenmp")
+    set(CMAKE_CXX_FLAGS         "${CMAKE_CXX_FLAGS} -fPIC -g -pg")
     set(CMAKE_CXX_FLAGS_DEBUG   "")
     set(CMAKE_CXX_FLAGS_RELEASE "-O3")
 else()
@@ -58,4 +58,9 @@ include_directories(${CMAKE_SOURCE_DIR}/include
                     ${CMAKE_SOURCE_DIR}/include/dai)
 
 message(STATUS "include: ${CMAKE_SOURCE_DIR}/include/dai")
+
+if(${BUILD_SHARED_LIBS})
+ADD_LIBRARY(dai SHARED ${DAI_SRC_FILES})
+else()
 ADD_LIBRARY(dai ${DAI_SRC_FILES})
+endif()

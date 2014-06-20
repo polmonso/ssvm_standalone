@@ -2102,7 +2102,7 @@ void set_default_parameters(Config* config)
   }
 }
 
-void getColormapName(string& paramColormap)
+int getColormapName(string& paramColormap)
 {
   paramColormap = "colormap.txt";
   // first, check if colormap file exists in current directory
@@ -2118,9 +2118,16 @@ void getColormapName(string& paramColormap)
         if(pPath == 0)
           pPath = getenv ("HOME");
         paramColormap = pPath + paramColormap;
+        if(!fileExists(paramColormap)){
+            //TODO if file does not exist anywhere, create it. Now it's assumed train will have done it.
+            fprintf(stderr,"Error reading default colormap to local directory.\n");
+            assert(!"Error reading default colormap to disk.");
+            return -1;
+        }
       }
     }
   }
+  return 0;
 }
 
 double getMedian(vector<double>& list_values)
@@ -2146,8 +2153,13 @@ void loadData(string imageDir, string maskDir, Config* config,
               Slice_P*& slice)
 {
   string paramSlice3d;
-  config->getParameter("slice3d", paramSlice3d);
-  bool useSlice3d = paramSlice3d.c_str()[0] == '1';
+  bool useSlice3d;
+  if(!config->getParameter("slice3d", paramSlice3d)){
+      //parameter is not set, use default.
+      useSlice3d = true;
+  } else {
+    useSlice3d = paramSlice3d.c_str()[0] == '1';
+  }
   bool includeBoundaryLabels = false;
   if(useSlice3d) {
     Slice3d* slice3d = new Slice3d(imageDir.c_str());
@@ -2175,9 +2187,14 @@ void loadDataAndFeatures(string imageDir, string maskDir, Config* config,
   slice = 0;
   feature = 0;
   string config_tmp;
-  Config::Instance()->getParameter("slice3d", config_tmp);
-  bool useSlice3d = config_tmp.c_str()[0] == '1';
-
+  string paramSlice3d;
+  bool useSlice3d;
+  if(!config->getParameter("slice3d", paramSlice3d)){
+        //parameter is not set, use default.
+        useSlice3d = true;
+    } else {
+      useSlice3d = paramSlice3d.c_str()[0] == '1';
+    }
   int nGradientLevels = 0;
   if(config->getParameter("nGradientLevels", config_tmp)) {
     nGradientLevels = atoi(config_tmp.c_str());
@@ -2196,7 +2213,7 @@ void loadDataAndFeatures(string imageDir, string maskDir, Config* config,
 #endif
 
   vector<eFeatureType> feature_types;
-  int paramFeatureTypes = 0;
+  int paramFeatureTypes = DEFAULT_FEATURE_TYPE;
   if(config->getParameter("featureTypes", config_tmp)) {
     paramFeatureTypes = atoi(config_tmp.c_str());
     getFeatureTypes(paramFeatureTypes, feature_types);
@@ -2276,7 +2293,7 @@ void loadDataAndFeatures(string imageDir, string maskDir, Config* config,
 
     string imageName = getDirectoryFromPath(imageDir);
     string maskName = maskDir + imageName;
-    printf("[utils] maskName = %s\n", maskName.c_str());
+    fprintf(stderr,"[utils] maskName = %s\n", maskName.c_str());
     bool includeBoundaryLabels = false;
     slice2d->generateSupernodeLabelFromMaskImage(maskName.c_str(),
                                                  includeBoundaryLabels);
@@ -2791,13 +2808,44 @@ void zipAndDeleteCube(const char* cubeName)
   }
 }
 */
-
+#include <dirent.h>
 void copyFile(const char* src_filename, const char* dst_filename)
 {
   std::ifstream src(src_filename, std::ios::binary);
   std::ofstream dst(dst_filename,   std::ios::binary);
 
+  DIR *dir;
+  struct dirent *ent;
+  std::cout << " listing files in dir parameter0/ : " << std::endl;
+  if ((dir = opendir ("parameter0/")) != NULL) {
+    /* print all the files and directories within directory */
+    while ((ent = readdir (dir)) != NULL) {
+      printf ("%s\n", ent->d_name);
+    }
+    closedir (dir);
+  } else {
+    /* could not open directory */
+    perror ("could not open dir parameter0/");
+  }
+  std::cout << "done listing" << std::endl;
+
+  std::cout << " source filename: " << src_filename << std::endl;
+
+    std::cout << " good()=" << src.good();
+    std::cout << " eof()=" << src.eof();
+    std::cout << " fail()=" << src.fail();
+    std::cout << " bad()=" << src.bad();
+
+    std::cout << " dst filename: "    << dst_filename << std::endl;
+
   dst << src.rdbuf();
+  std::cout << " good()=" << dst.good();
+  std::cout << " eof()=" << dst.eof();
+  std::cout << " fail()=" << dst.fail();
+  std::cout << " bad()=" << dst.bad() << std::endl;
+
+  if(src.fail())
+      std::cerr << "File " << src_filename << " does not exist. Copy will have no effect." << std::endl;
 
   src.close();
   dst.close();

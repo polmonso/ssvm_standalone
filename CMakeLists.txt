@@ -2,10 +2,13 @@ cmake_minimum_required(VERSION 2.4)
 
 PROJECT(sliceMe)
 
+unset(SLICEME_DIR CACHE)
 #set(SLICEME_DIR ${CMAKE_SOURCE_DIR})
-set(SLICEME_DIR ${PROJECT_SOURCE_DIR})
+#set(SLICEME_DIR ${CMAKE_CURRENT_SOURCE_DIR})
+set(SLICEME_DIR ${CMAKE_CURRENT_LIST_DIR})
+message(STATUS "sliceme dir ${SLICEME_DIR}")
 
-include(CMakeLists_common.txt)
+include(${SLICEME_DIR}/CMakeLists_common.txt)
 
 ####################################################################### LIBRARY
 
@@ -21,7 +24,9 @@ SET_TARGET_PROPERTIES(superpixel PROPERTIES ENABLE_EXPORTS TRUE)
 
 add_library(ssvm
 ${SLICEME_FILES}
+${SLICEME_DIR}/core/predict.cpp
 )
+message(STATUS "ssvm third party libraries: ${SLICEME_THIRD_PARTY_LIBRARIES}")
 
 TARGET_LINK_LIBRARIES(ssvm ${SLICEME_THIRD_PARTY_LIBRARIES})
 if(UNIX)
@@ -29,6 +34,8 @@ if(UNIX)
 endif(UNIX)
 SET_TARGET_PROPERTIES(ssvm PROPERTIES ENABLE_EXPORTS TRUE)
 
+#add_custom_target(combined ALL
+#   COMMAND ${CMAKE_CXX_ARCHIVE_CREATE} libssvmcombined.a ${SLICEME_THIRD_PARTY_LIBRARIES} libssvm.a)
 
 ###################################################################### BINARIES
 SET_SOURCE_FILES_PROPERTIES( ${SLICEME_DIR}/core/train.c ${INFERENCE_FILES} ${SLICEME_FILES} PROPERTIES LANGUAGE CXX )

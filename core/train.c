@@ -31,7 +31,7 @@
 void   init_parameters(long *, long *,
                        STRUCT_LEARN_PARM *, LEARN_PARM *, KERNEL_PARM *);
 
-void train(char* config);
+bool train(char* config);
 
 int main (int argc, char* argv[])
 {
@@ -44,7 +44,7 @@ int main (int argc, char* argv[])
   return EXIT_SUCCESS;
 }
 
-void train(char* config)
+bool train(char* config)
 {
   SAMPLE sample;  /* training sample */
   LEARN_PARM learn_parm;
@@ -83,7 +83,7 @@ void train(char* config)
   else if(struct_parm.alg_type == 9)
     svm_learn_struct_joint_custom(sample,&struct_parm,&learn_parm,&kernel_parm,&structmodel);
   else
-    exit(EXIT_FAILURE);
+    return false;
 
   clock_t t = clock() - time_0;
   printf("[main] Running time = %ld clocks = %f s\n", t, t/(float)CLOCKS_PER_SEC); fflush(stdout);
@@ -103,12 +103,13 @@ void train(char* config)
     printf("done\n");fflush(stdout);
   }
 
-  finalize();
+  finalize(&struct_parm);
 
   free_struct_sample(sample);
   free_struct_model(structmodel);
 
   svm_struct_learn_api_exit();
+  return true;
 }
 
 /*---------------------------------------------------------------------------*/

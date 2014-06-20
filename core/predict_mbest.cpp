@@ -249,7 +249,7 @@ int main(int argc,char* argv[])
   }
 
   vector<eFeatureType> feature_types;
-  int paramFeatureTypes = 0;
+  int paramFeatureTypes = DEFAULT_FEATURE_TYPE;
   if(config->getParameter("featureTypes", config_tmp)) {
     paramFeatureTypes = atoi(config_tmp.c_str());
     getFeatureTypes(paramFeatureTypes, feature_types);

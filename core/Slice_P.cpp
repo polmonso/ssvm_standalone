@@ -418,7 +418,6 @@ void Slice_P::rescalePrecomputedFeatures(const char* scale_filename)
     // mean
     getline(ifs, line);
     splitString(line, tokens);
-    printf("tokens.size %ld\n", tokens.size());
     for(int i = 0; i < fvSize; ++i) {
       mean[i].value = atof(tokens[i].c_str());
     }
@@ -427,7 +426,6 @@ void Slice_P::rescalePrecomputedFeatures(const char* scale_filename)
     getline(ifs, line);
     tokens.clear();
     splitString(line, tokens);
-    printf("tokens.size %ld\n", tokens.size());
     for(int i = 0; i < fvSize; ++i) {
       variance[i].value = atof(tokens[i].c_str());
     }

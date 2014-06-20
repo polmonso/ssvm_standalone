@@ -102,9 +102,9 @@ SWORD* computePsi(SWORD* words, SPATTERN x, LABEL y, const STRUCTMODEL *sm,
                  const STRUCT_LEARN_PARM *sparm,
                  double* _score = 0);
 
-void finalize();
+void finalize(STRUCT_LEARN_PARM *sparm);
 
-void get_best_parameter_vector_id(int& best_idx);
+void get_best_parameter_vector_id(STRUCT_LEARN_PARM *sparm, int& best_idx);
 
 void get_best_parameter_vector(EnergyParam* param);
 

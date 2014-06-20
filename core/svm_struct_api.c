@@ -1679,14 +1679,22 @@ void load_learn_parm(STRUCT_LEARN_PARM *sparm, Config* config)
     SSVM_PRINT("[SVM_struct] Generating random colormap\n");
     srand(time(NULL));
 
+    FILE *f = fopen("colormap.txt", "w");
+    if (f == NULL) {
+        fprintf(stderr,"Error writing default colormap to local directory.\n");
+        assert(!"Error writing default colormap to disk.");
+    }
+
     for(int label = 0; label < sparm->nClasses; ++label) {
       uchar r = (uchar)(rand()*255.0 / (double)RAND_MAX);
       uchar g = (uchar)(rand()*255.0 / (double)RAND_MAX);
       uchar b = (uchar)(rand()*255.0 / (double)RAND_MAX);
       ulong classIdx = RGBToclassIdx(r, g, b);
+      fprintf(f, "%d %lu %u %u %u\n", label, classIdx, r, g, b);
       sparm->classIdxToLabel[classIdx] = label;
       sparm->labelToClassIdx[(labelType)label] = classIdx;
     }
+    fclose(f);
   }
 
   sparm->useSymmetricWeights = true;
@@ -3715,7 +3723,7 @@ void         parse_struct_parameters_classify(STRUCT_LEARN_PARM *sparm)
   }
 }
 
-void get_best_parameter_vector_id(int& best_idx)
+void get_best_parameter_vector_id( STRUCT_LEARN_PARM * sparm, int& best_idx )
 {
   const int score_idx = 9;
   string training_score_filename = scoreDir + "training_score.txt";
@@ -3749,25 +3757,14 @@ void get_best_parameter_vector_id(int& best_idx)
   }
   ifs.close();
 
-  string config_tmp;
-  Config* config = Config::Instance();
-  int stepForOutputFiles = 1;
-  if(config->getParameter("stepForOutputFiles", config_tmp)) {
-    stepForOutputFiles = atoi(config_tmp.c_str());
-    if(stepForOutputFiles == 0) {
-      printf("[SVM_struct] Error: stepForOutputFiles = 0\n");
-      exit(-1);
-    }
-  }
-
-  printf("[svm_struct] best_idx %d %d\n", best_idx, stepForOutputFiles);
-  best_idx *= stepForOutputFiles;
+  best_idx *= sparm->stepForOutputFiles;
+  SSVM_PRINT("[svm_struct] best_idx %d %d\n", best_idx, sparm->stepForOutputFiles);
 }
 
-void get_best_parameter_vector(EnergyParam* param)
+void get_best_parameter_vector(STRUCT_LEARN_PARM * sparm, EnergyParam* param)
 {
   int best_idx = 0;
-  get_best_parameter_vector_id(best_idx);
+  get_best_parameter_vector_id(sparm, best_idx);
   if(best_idx != -1) {
     stringstream parameterFile;
     parameterFile << parameterDir << "iteration_";
@@ -3778,7 +3775,7 @@ void get_best_parameter_vector(EnergyParam* param)
   }
 }
 
-void finalize()
+void finalize(STRUCT_LEARN_PARM * sparm)
 {
   string outputModel = "model.txt";
   if(Config::Instance()->getParameter("outputModel", outputModel)) {
@@ -3787,9 +3784,10 @@ void finalize()
     outputModel = "model.txt";
   }
 
+
   // pick best model
   int best_idx = 0;
-  get_best_parameter_vector_id(best_idx);
+  get_best_parameter_vector_id(sparm, best_idx);
 
   /*
   stringstream cmd;
@@ -3805,7 +3803,7 @@ void finalize()
   stringstream src_filename;
   src_filename << "parameter_vector0/iteration_";
   src_filename << best_idx;
-  src_filename << ".txt ";
+  src_filename << ".txt";
   SSVM_PRINT("[svm_struct] Copying %s to %s\n",
              src_filename.str().c_str(), outputModel.c_str());
   copyFile(src_filename.str().c_str(), outputModel.c_str());

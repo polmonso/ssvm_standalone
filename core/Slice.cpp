@@ -135,7 +135,8 @@ void Slice::initSuperpixels(const char* a_image_name, const char* fn_label,
     img = cvLoadImage(a_image_name,CV_LOAD_IMAGE_COLOR);
     eraseImage = true;
     if(!img) {
-      printf("[Slice] Error : input image %s was not found\n", a_image_name);
+      fprintf(stderr,"[Slice] Error : input image %s was not found\n", a_image_name);
+      exit(-1);
       return;
     }
 
@@ -228,7 +229,8 @@ void Slice::generateSuperpixels(const char* a_img_name, int superpixelStepSize, 
   img = cvLoadImage(a_img_name,CV_LOAD_IMAGE_COLOR);
   eraseImage = true;
   if(!img) {
-    printf("[Slice] Error : input image %s was not found\n", a_img_name);
+    fprintf(stderr, "[Slice] Error : input image %s was not found\n", a_img_name);
+    exit(-1);
     return;
   }
   generateSuperpixels(superpixelStepSize, M);

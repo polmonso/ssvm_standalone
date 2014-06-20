@@ -878,7 +878,7 @@ void computeScore(const char* image_dir,
 
   vector<eFeatureType> feature_types;
   if(weight_file != 0) {
-    int paramFeatureTypes = 0;
+    int paramFeatureTypes = DEFAULT_FEATURE_TYPE;
     string config_tmp;
     if(Config::Instance()->getParameter("featureTypes", config_tmp)) {
       paramFeatureTypes = atoi(config_tmp.c_str());
@@ -914,7 +914,7 @@ void computeScore(const char* image_dir,
 
     IplImage* imgAnnotation = cvLoadImage(groundtruthName.c_str());
     if(!imgAnnotation) {
-      printf("[inference] Error: input mask %s was not found\n", groundtruthName.c_str());
+      fprintf(stderr, "[inference] Error: input mask %s was not found\n", groundtruthName.c_str());
       exit(-1);
     }
 
