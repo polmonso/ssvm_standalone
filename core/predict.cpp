@@ -251,220 +251,225 @@ bool predict(int argc, char *argv[]) {
 
   std::cout << "Starting prediction" << std::endl;
 
-  args.image_dir = 0;
-  args.mask_dir = (char*)"";
-  args.nImages = -1;
-  args.superpixel_labels = 0;
-  args.output_dir = (char*)"./inference/";
-  args.algo_type = T_GI_MULTIOBJ;
-  args.weight_file = 0;
-  verbose = false;
-  args.image_pattern = (char*)"png";
-  args.superpixelStepSize = SUPERPIXEL_DEFAULT_STEP_SIZE;
-  args.config_file = 0;
-  args.overlay_dir = 0;
-  args.export_all = false;
-  args.dataset_type = 0;
-  args.use_average_vector = false;
-  const bool compress_image = false;
+  try {
+      args.image_dir = 0;
+      args.mask_dir = (char*)"";
+      args.nImages = -1;
+      args.superpixel_labels = 0;
+      args.output_dir = (char*)"./inference/";
+      args.algo_type = T_GI_MULTIOBJ;
+      args.weight_file = 0;
+      verbose = false;
+      args.image_pattern = (char*)"png";
+      args.superpixelStepSize = SUPERPIXEL_DEFAULT_STEP_SIZE;
+      args.config_file = 0;
+      args.overlay_dir = 0;
+      args.export_all = false;
+      args.dataset_type = 0;
+      args.use_average_vector = false;
+      const bool compress_image = false;
 
-  int option_index = 0;
-  int key;
-  int parsing_output;
+      int option_index = 0;
+      int key;
+      int parsing_output;
 
-  if(argc < 2){
-     fprintf(stderr, "Insufficient number of arguments. Missing configuration and model file.\n Example: predict -c config.txt -w model.txt\n usage with -h");
-     return false;
-  }
+      if(argc < 2){
+         fprintf(stderr, "Insufficient number of arguments. Missing configuration and model file.\n Example: predict -c config.txt -w model.txt\n usage with -h");
+         return false;
+      }
 
-  while((key = getopt_long(argc, argv, "ac:g:i:k:l:m:n:o:s:t:vw:y:h", long_options, &option_index)) != -1){
-      parsing_output = parse_opt(key, optarg, &args);
-      if(parsing_output == -1){
-          fprintf(stderr, "Wrong argument. Parsing failed.");
+      while((key = getopt_long(argc, argv, "ac:g:i:k:l:m:n:o:s:t:vw:y:h", long_options, &option_index)) != -1){
+          parsing_output = parse_opt(key, optarg, &args);
+          if(parsing_output == -1){
+              fprintf(stderr, "Wrong argument. Parsing failed.");
+              return false;
+          }
+      }
+
+      if(args.overlay_dir == 0) {
+        args.overlay_dir = args.output_dir;
+      }
+
+      string config_tmp;
+      Config* config = new Config(args.config_file);
+      Config::setInstance(config);
+
+      set_default_parameters(config);
+
+      mkdir(args.output_dir, 0777);
+
+      string imageDir;
+      string maskDir;
+      if(args.image_dir != 0) {
+        imageDir = args.image_dir;
+      } else {
+        if(args.dataset_type == 0) {
+          Config::Instance()->getParameter("trainingDir", imageDir);
+          Config::Instance()->getParameter("maskTrainingDir", maskDir);
+        } else {
+          Config::Instance()->getParameter("testDir", imageDir);
+          Config::Instance()->getParameter("maskTestDir", maskDir);
+        }
+      }
+
+      vector<eFeatureType> feature_types;
+      int paramFeatureTypes = DEFAULT_FEATURE_TYPE;
+      if(config->getParameter("featureTypes", config_tmp)) {
+        paramFeatureTypes = atoi(config_tmp.c_str());
+        getFeatureTypes(paramFeatureTypes, feature_types);
+      }
+
+      if(config->getParameter("giType", config_tmp)) {
+        args.algo_type = atoi(config_tmp.c_str());
+        printf("[SVM_struct] giType = %d\n", args.algo_type);
+      }
+
+      EnergyParam param(args.weight_file);
+
+      // TODO: Find a better way to change the labels!
+      if(param.nClasses == 3) {
+        printf("[svm_struct] Set class labels\n");
+        BACKGROUND = 0;
+        BOUNDARY = 1;
+        FOREGROUND = 2;
+      }
+
+      Slice_P* slice = 0;
+      Feature* feature = 0;
+      int featureSize = 0;
+      loadDataAndFeatures(imageDir, maskDir, config, slice, feature, &featureSize);
+
+      // rescale features
+      bool rescale_features = false;
+      if(Config::Instance()->getParameter("rescale_features", config_tmp)) {
+        rescale_features = config_tmp.c_str()[0] == '1';
+      }
+      if(rescale_features) {
+        const char* scale_filename = "scale.txt";
+        printf("[Main] Rescaling features\n");
+        slice->rescalePrecomputedFeatures(scale_filename);
+      }
+
+      if( (args.weight_file == 0) || !fileExists(args.weight_file)) {
+        printf("[Main] No parameter file provided. Loading vector of 1's\n");
+        // load vector of 1's for unary term
+        param.nClasses = 2;
+        param.sizePsi = featureSize;
+        param.nUnaryWeights = featureSize;
+        param.nScalingCoefficients = featureSize;
+        param.nScales = 1;
+        param.weights = new double[featureSize];
+        for(int f = 0; f < featureSize; ++f) {
+          param.weights[f] = 1;
+        }
+      }
+
+      string colormapFilename;
+      if(getColormapName(colormapFilename) < 0){
+          //FIXME notify client reading the colormap failed.
           return false;
       }
-  } 
+      printf("[Main] Colormap=%s\n", colormapFilename.c_str());
+      map<labelType, ulong> labelToClassIdx;
+      getLabelToClassMap(colormapFilename.c_str(), labelToClassIdx);
 
-  if(args.overlay_dir == 0) {
-    args.overlay_dir = args.output_dir;
-  }
+      if(args.use_average_vector) {
+        char* average_weight_file = "average_weights.txt";
+        args.weight_file = average_weight_file;
+        char* input_dir = ".";
 
-  string config_tmp;
-  Config* config = new Config(args.config_file);
-  Config::setInstance(config);
+        create_average_weigth_vector(input_dir, average_weight_file, 0, 1e10, 1);
+      }
 
-  set_default_parameters(config);
+      labelType* groundTruthLabels = 0;
+      double* lossPerLabel = 0;
+      const int nExamples = 1;
+      const string score_filename = "";
+      for(int sid = 0; sid < nExamples; sid++) {
 
-  mkdir(args.output_dir, 0777);
-
-  string imageDir;
-  string maskDir;
-  if(args.image_dir != 0) {
-    imageDir = args.image_dir;
-  } else {
-    if(args.dataset_type == 0) {
-      Config::Instance()->getParameter("trainingDir", imageDir);
-      Config::Instance()->getParameter("maskTrainingDir", maskDir);
-    } else {
-      Config::Instance()->getParameter("testDir", imageDir);
-      Config::Instance()->getParameter("maskTestDir", maskDir);
-    }
-  }
-
-  vector<eFeatureType> feature_types;
-  int paramFeatureTypes = DEFAULT_FEATURE_TYPE;
-  if(config->getParameter("featureTypes", config_tmp)) {
-    paramFeatureTypes = atoi(config_tmp.c_str());
-    getFeatureTypes(paramFeatureTypes, feature_types);
-  }
-
-  if(config->getParameter("giType", config_tmp)) {
-    args.algo_type = atoi(config_tmp.c_str());
-    printf("[SVM_struct] giType = %d\n", args.algo_type);
-  }
-
-  EnergyParam param(args.weight_file);
-
-  // TODO: Find a better way to change the labels!
-  if(param.nClasses == 3) {
-    printf("[svm_struct] Set class labels\n");
-    BACKGROUND = 0;
-    BOUNDARY = 1;
-    FOREGROUND = 2;
-  }
-
-  Slice_P* slice = 0;
-  Feature* feature = 0;
-  int featureSize = 0;
-  loadDataAndFeatures(imageDir, maskDir, config, slice, feature, &featureSize);
-
-  // rescale features
-  bool rescale_features = false;
-  if(Config::Instance()->getParameter("rescale_features", config_tmp)) {
-    rescale_features = config_tmp.c_str()[0] == '1';
-  }
-  if(rescale_features) {
-    const char* scale_filename = "scale.txt";
-    printf("[Main] Rescaling features\n");
-    slice->rescalePrecomputedFeatures(scale_filename);
-  }
-
-  if( (args.weight_file == 0) || !fileExists(args.weight_file)) {
-    printf("[Main] No parameter file provided. Loading vector of 1's\n");
-    // load vector of 1's for unary term
-    param.nClasses = 2;
-    param.sizePsi = featureSize;
-    param.nUnaryWeights = featureSize;
-    param.nScalingCoefficients = featureSize;
-    param.nScales = 1;
-    param.weights = new double[featureSize];
-    for(int f = 0; f < featureSize; ++f) {
-      param.weights[f] = 1;
-    }
-  }
-
-  string colormapFilename;
-  if(getColormapName(colormapFilename) < 0){
-      //FIXME notify client reading the colormap failed.
-      return false;
-  }
-  printf("[Main] Colormap=%s\n", colormapFilename.c_str());
-  map<labelType, ulong> labelToClassIdx;
-  getLabelToClassMap(colormapFilename.c_str(), labelToClassIdx);
-
-  if(args.use_average_vector) {
-    char* average_weight_file = "average_weights.txt";
-    args.weight_file = average_weight_file;
-    char* input_dir = ".";
-
-    create_average_weigth_vector(input_dir, average_weight_file, 0, 1e10, 1);
-  }
-
-  labelType* groundTruthLabels = 0;
-  double* lossPerLabel = 0;
-  const int nExamples = 1;
-  const string score_filename = "";
-  for(int sid = 0; sid < nExamples; sid++) {
-
-    SPATTERN p;
-    p.id = 0;
-    p.slice = slice;
-    p.feature = feature;
-
-    segmentImage(p,
-                 args.output_dir,
-                 args.algo_type,
-                 param,
-                 //args.weight_file,
-                 &labelToClassIdx,
-                 score_filename,
-                 groundTruthLabels, lossPerLabel,
-                 compress_image,
-                 args.overlay_dir,
-                 METRIC_SUPERNODE_BASED_01);
-    fflush(stdout);
-
-    if(args.export_all) {
-
-      if(args.algo_type != T_GI_MAX) {
-        printf("[Main] Running inference with unary potentials only\n");
-        // run inference with unary potentials only (algo_type = T_GI_MAX)
-        stringstream sout_output;
-        sout_output << args.output_dir;
-        sout_output << "/unary/";
-        mkdir(sout_output.str().c_str(), 0777);
-
-        stringstream sout_overlay;
-        sout_overlay << args.output_dir;
-        sout_overlay << "/unary/";
-        mkdir(sout_overlay.str().c_str(), 0777);
+        SPATTERN p;
+        p.id = 0;
+        p.slice = slice;
+        p.feature = feature;
 
         segmentImage(p,
                      args.output_dir,
-                     T_GI_MAX,
-                     //args.weight_file,
+                     args.algo_type,
                      param,
+                     //args.weight_file,
                      &labelToClassIdx,
                      score_filename,
                      groundTruthLabels, lossPerLabel,
                      compress_image,
                      args.overlay_dir,
                      METRIC_SUPERNODE_BASED_01);
+        fflush(stdout);
+
+        if(args.export_all) {
+
+          if(args.algo_type != T_GI_MAX) {
+            printf("[Main] Running inference with unary potentials only\n");
+            // run inference with unary potentials only (algo_type = T_GI_MAX)
+            stringstream sout_output;
+            sout_output << args.output_dir;
+            sout_output << "/unary/";
+            mkdir(sout_output.str().c_str(), 0777);
+
+            stringstream sout_overlay;
+            sout_overlay << args.output_dir;
+            sout_overlay << "/unary/";
+            mkdir(sout_overlay.str().c_str(), 0777);
+
+            segmentImage(p,
+                         args.output_dir,
+                         T_GI_MAX,
+                         //args.weight_file,
+                         param,
+                         &labelToClassIdx,
+                         score_filename,
+                         groundTruthLabels, lossPerLabel,
+                         compress_image,
+                         args.overlay_dir,
+                         METRIC_SUPERNODE_BASED_01);
+          }
+
+          // export marginals
+          SSVM_PRINT("[Main] Exporting marginals\n");
+          GI_libDAI* gi_Inference = new GI_libDAI(slice,
+                                                  &param,
+                                                  param.weights,
+                                                  groundTruthLabels,
+                                                  lossPerLabel,
+                                                  feature,
+                                                  0, 0);
+          fflush(stdout);
+
+          int nNodes = slice->getNbSupernodes();
+          float* marginals = new float[nNodes];
+          GI_libDAI* libDAI = gi_Inference;
+
+          for(int l = 0; l < param.nClasses; ++l) {
+            libDAI->getMarginals(marginals, l);
+
+            stringstream sout;
+            sout << args.output_dir;
+            sout << "/marginals_" << l << "/";
+            mkdir(sout.str().c_str(), 0777);
+            sout << getNameFromPathWithoutExtension(slice->getName());
+            sout << ".png";
+            SSVM_PRINT("Exporting %s\n", sout.str().c_str());
+            slice->exportProbabilities(sout.str().c_str(), param.nClasses, marginals);
+          }
+
+        }
       }
-
-      // export marginals
-      SSVM_PRINT("[Main] Exporting marginals\n");
-      GI_libDAI* gi_Inference = new GI_libDAI(slice,
-                                              &param,
-                                              param.weights,
-                                              groundTruthLabels,
-                                              lossPerLabel,
-                                              feature,
-                                              0, 0);
-      fflush(stdout);
-
-      int nNodes = slice->getNbSupernodes();
-      float* marginals = new float[nNodes];
-      GI_libDAI* libDAI = gi_Inference;
-
-      for(int l = 0; l < param.nClasses; ++l) {
-        libDAI->getMarginals(marginals, l);
-        
-        stringstream sout;
-        sout << args.output_dir;
-        sout << "/marginals_" << l << "/";
-        mkdir(sout.str().c_str(), 0777);
-        sout << getNameFromPathWithoutExtension(slice->getName());
-        sout << ".png";
-        SSVM_PRINT("Exporting %s\n", sout.str().c_str());
-        slice->exportProbabilities(sout.str().c_str(), param.nClasses, marginals);
-      }
-      
-    }
+      SSVM_PRINT("[Main] Cleaning\n");
+      SSVM_PRINT("[Main] Done\n");
+  } catch(std::runtime_error &e) {
+      fprintf(stderr,"[Main] Error: %s\n", e.what());
+      return false;
   }
 
-  SSVM_PRINT("[Main] Cleaning\n");
-  SSVM_PRINT("[Main] Done\n");
   return true;
 }
 

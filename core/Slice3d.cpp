@@ -250,7 +250,7 @@ void Slice3d::loadSupervoxels(const char* imageDir, const int voxel_step, const 
     importNRRDCube_uint(soutSupervoxels_nrrd.str().c_str(), outputData, width, height, depth);
 #else
     PRINT_MESSAGE("[Slice3d] Set USE_ITK to true to import NRRD cubes\n");
-    exit(-1);
+    qFatal("[Slice3d] Set USE_ITK to true to import NRRD cubes\n");
 #endif
     importSupervoxelsFromBuffer((const uint*)outputData, width, height, depth);
     delete[] outputData;
@@ -488,7 +488,7 @@ void Slice3d::createIndexingStructures(sidType** _klabels, bool force)
                   sn = (*mSupervoxels)[nsid];
                   if(sn == 0) {
                     printf("[Slice3d] Error : supernode %d is null (coordinate=(%d,%d,%d))\n",nsid,nx,ny,nz);
-                    exit(-1);
+                    qFatal("[Slice3d] Error : supernode %d is null (coordinate=(%d,%d,%d))\n",nsid,nx,ny,nz);
                   }
                   ptrNeighbors = &(s->neighbors);
                   existingSupernode = false;
@@ -856,7 +856,7 @@ void Slice3d::loadFromDir(const char* dir, const node& start, const node& end)
       IplImage* img_slice = cvLoadImage(filePath.c_str(),0);
 
       if(!img_slice){
-		  fprintf(stderr,"not loaded\n");
+          fprintf(stderr,"Image slice not loaded. [%s:%d\n",__FILE__,__LINE__);
 		  continue;
 	  }
 
@@ -868,8 +868,7 @@ void Slice3d::loadFromDir(const char* dir, const node& start, const node& end)
   }
 
   if(nValidImgs == 0){
-	  fprintf(stderr,"No valid images were found in  %s. %s:%d\n", dir, __FILE__, __LINE__);
-      exit(-1);
+      qFatal("No valid images were found in  %s. %s:%d\n", dir, __FILE__, __LINE__);
   }
 
   if(nImgs != -1) {
@@ -949,7 +948,7 @@ void Slice3d::loadFromDir(const char* dir, const node& start, const node& end)
             {
               // FIXME
               printf("[Slice3d] img_slice->nChannels %d\n", img_slice->nChannels);
-              exit(-1);
+              qFatal("[Slice3d] img_slice->nChannels %d\n", img_slice->nChannels);
             }
 
           if(img->widthStep != img->width)
@@ -1064,7 +1063,7 @@ void Slice3d::loadFromDir(const char* dir, uchar*& raw_data,
             {
               // FIXME
               printf("[Slice3d] img_slice->nChannels %d\n", img_slice->nChannels);
-              exit(-1);
+              qFatal("[Slice3d] img_slice->nChannels %d\n", img_slice->nChannels);
             }
 
           if(img->widthStep != img->width)
@@ -1778,7 +1777,7 @@ void Slice3d::exportSupernodeLabels(const char* filename, int nClasses,
       label = labels[sid];
       if(label>nClasses) {
         printf("[Slice3d] Error in exportSupernodeLabels : label=%d > nClasses=%d\n",label,nClasses+1);
-        exit(-1);
+        qFatal("[Slice3d] Error in exportSupernodeLabels : label=%d > nClasses=%d\n",label,nClasses+1);
       }
 
       nodeIterator ni = s->getIterator();
@@ -1827,7 +1826,7 @@ void Slice3d::exportSupernodeLabels(const char* filename, int nClasses,
       label = labels[sid];
       if(label>nClasses) {
         printf("[Slice3d] Error in exportSupernodeLabels : label=%d > nClasses=%d\n",label,nClasses+1);
-        exit(-1);
+        qFatal("[Slice3d] Error in exportSupernodeLabels : label=%d > nClasses=%d\n",label,nClasses+1);
       }
 
       nodeIterator ni = s->getIterator();

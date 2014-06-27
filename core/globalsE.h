@@ -19,6 +19,9 @@
 
 using namespace std;
 
+#include <stdexcept>
+#define qFatal(...) do { char errStr[8192]; sprintf(errStr, __VA_ARGS__); throw std::runtime_error(errStr); } while(0);
+
 //-----------------------------------------------------------------------------
 // Experimenting...
 

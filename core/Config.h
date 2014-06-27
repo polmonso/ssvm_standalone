@@ -20,6 +20,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#include "globalsE.h"
+
 using namespace std;
 
 //------------------------------------------------------------------------------
@@ -43,7 +45,7 @@ class Config
     if (pInstance == 0)  // is it the first call?
       {
         printf("[Config] Error : you have to load a configuration file\n");
-        exit(-1);
+        qFatal("[Config] Error : you have to load a configuration file\n");
         //pInstance = new Config(); // create unique instance
       }
     return pInstance; // address of unique instance
