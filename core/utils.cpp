@@ -2216,8 +2216,8 @@ void loadDataAndFeatures(string imageDir, string maskDir, Config* config,
   int paramFeatureTypes = DEFAULT_FEATURE_TYPE;
   if(config->getParameter("featureTypes", config_tmp)) {
     paramFeatureTypes = atoi(config_tmp.c_str());
-    getFeatureTypes(paramFeatureTypes, feature_types);
   }
+  getFeatureTypes(paramFeatureTypes, feature_types);
 
   if(useSlice3d) {
     printf("[utils] Loading 3d cube using images in %s\n", imageDir.c_str());
@@ -2260,10 +2260,11 @@ void loadDataAndFeatures(string imageDir, string maskDir, Config* config,
     sout_feature_filename << "_" << DEFAULT_FEATURE_DISTANCE;
     printf("[utils] Checking %s\n", sout_feature_filename.str().c_str());
     bool featuresLoaded = false;
-    if(fileExists(sout_feature_filename.str())) {
-      printf("[utils] Loading features from %s\n", sout_feature_filename.str().c_str());
+    std::string feature_filename = sout_feature_filename.str();
+    if(fileExists(feature_filename)) {
+      printf("[utils] Loading features from %s\n", feature_filename.c_str());
       *featureSize = -1;
-      if(slice->loadFeatures(sout_feature_filename.str().c_str(), featureSize)) {
+      if(slice->loadFeatures(feature_filename.c_str(), featureSize)) {
         featuresLoaded = true;
         feature = new F_Precomputed(slice->getPrecomputedFeatures(), *featureSize/DEFAULT_FEATURE_DISTANCE);
         printf("[utils] Features Loaded succesfully\n");

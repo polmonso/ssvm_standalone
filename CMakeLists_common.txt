@@ -77,13 +77,17 @@ endif(USE_RAYS3D)
 
 #SET(OpenCV_FIND_COMPONENTS   CV CXCORE CVAUX HIGHGUI ML)
 #SET(OpenCV_FIND_REQUIRED_COMPONENTS   CV CXCORE CVAUX HIGHGUI ML)
-set(OpenCV_DIR "~/src/ThirdParty/OpenCV-2.4.2/" CACHE PATH "OpenCV root dir")
-#include_directories(${OpenCV_DIR}/include/)
+#set(OpenCV_DIR "~/src/ThirdParty/OpenCV-2.4.2/" CACHE PATH "OpenCV root dir")
+#include_directories(${OpenCV_DIR}/../3rdparty/libpng/)
 #include_directories(${OpenCV_DIR}/include/opencv/)
 FIND_PACKAGE(OpenCV REQUIRED)
 # add include directories
 include_directories(${OPENCV_INCLUDE_DIR})
 SET(OpenCV_LIBS ${OpenCV_LIBRARIES})
+# FIXME why opencv fails to include png.h ?
+message(STATUS "Opencv include dir ${OPENCV_INCLUDE_DIR} and opencv_dir ${OpenCV_DIR}")
+message(STATUS "OpenCV_LIBRARIES: ${OpenCV_LIBRARIES}")
+message(STATUS "OPENCV_INCLUDE_DIR: ${OPENCV_INCLUDE_DIR}")
 
 #Superpixel library
 find_library(SUPERPIXEL_LIBRARY NAMES supervoxel PATHS ${SLICEME_DIR}/lib/slic/)

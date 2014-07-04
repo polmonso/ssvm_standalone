@@ -108,7 +108,7 @@ class Colormap
     std::ifstream ifsCol(colormapFilename);
     if(ifsCol.fail()) {
       printf("[colormap] Error while loading %s\n", colormapFilename);
-      exit(-1);
+      qFatal("[colormap] Error while loading %s\n", colormapFilename);
     }
 
     while(std::getline(ifsCol, line)) {

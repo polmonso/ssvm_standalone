@@ -265,7 +265,7 @@ bool predict(int argc, char *argv[]) {
       args.config_file = 0;
       args.overlay_dir = 0;
       args.export_all = false;
-      args.dataset_type = 0;
+      args.dataset_type = 1; //0 training 1 test
       args.use_average_vector = false;
       const bool compress_image = false;
 
@@ -369,6 +369,8 @@ bool predict(int argc, char *argv[]) {
           //FIXME notify client reading the colormap failed.
           return false;
       }
+      //FIXME we assume that train(who creates de random colormap)
+      //and predict were ran on the same directory, should we?
       printf("[Main] Colormap=%s\n", colormapFilename.c_str());
       map<labelType, ulong> labelToClassIdx;
       getLabelToClassMap(colormapFilename.c_str(), labelToClassIdx);

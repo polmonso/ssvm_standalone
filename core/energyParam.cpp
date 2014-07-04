@@ -104,6 +104,8 @@ void EnergyParam::load(const char* filename)
   ifstream ifsStats(filename);
   if(ifsStats.fail()) {
     printf("[EnergyParam] Error while loading %s\n", filename);
+    //FIXME if not fatal it loads a model of 1 and doesn't work properly, failing silently
+    qFatal("[EnergyParam] Error while loading %s\n", filename);
     return;
   }
 
