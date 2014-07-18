@@ -26,25 +26,17 @@
 #include <stdlib.h>
 
 // SliceMe
-#include "globals.h"
+//FIXME include extern globals instead of globals to prevent duplicate symbols
+//when train and predict are shipped as a single library
+//#include "globals.h"
+#include "globalsE.h"
 
 void   init_parameters(long *, long *,
                        STRUCT_LEARN_PARM *, LEARN_PARM *, KERNEL_PARM *);
 
-bool train(char* config);
+#include "train.h"
 
-int main (int argc, char* argv[])
-{
-  if(argc < 2){
-    fprintf(stderr, "Missing configuration file argument\n");
-    fprintf(stderr, "Usage: train configuration_file\n");
-    return EXIT_FAILURE;
-  }
-  train(argv[1]);
-  return EXIT_SUCCESS;
-}
-
-bool train(char* config)
+bool train(const char* config)
 {
   SAMPLE sample;  /* training sample */
   LEARN_PARM learn_parm;

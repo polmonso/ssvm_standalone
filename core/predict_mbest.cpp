@@ -151,9 +151,9 @@ parse_opt (int key, char *arg, struct argp_state *state)
       break;
     case 'v':
       if(arg && arg[0] == '1')
-        verbose = true;
+        VERBOSE = true;
       else
-        verbose = false;
+        VERBOSE = false;
       break;
     case 'w':
       argments->weight_file = arg;
@@ -196,7 +196,7 @@ int main(int argc,char* argv[])
   args.output_dir = (char*)"./inference/";
   args.algo_type = T_GI_LIBDAI;
   args.weight_file = 0;
-  verbose = false;
+  VERBOSE = false;
   args.image_pattern = (char*)"png";
   args.superpixelStepSize = SUPERPIXEL_DEFAULT_STEP_SIZE;
   args.config_file = 0;

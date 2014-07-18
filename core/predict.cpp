@@ -184,7 +184,7 @@ static int parse_opt (int key, char *arg, struct arguments *argments)
       break;
     case 'v':
       //TODO change argument from no_argument to no_argument with flag
-      verbose = true;
+      VERBOSE = true;
       break;
     case 'w':
       argments->weight_file = arg;
@@ -259,7 +259,7 @@ bool predict(int argc, char *argv[]) {
       args.output_dir = (char*)"./inference/";
       args.algo_type = T_GI_MULTIOBJ;
       args.weight_file = 0;
-      verbose = false;
+      VERBOSE = false;
       args.image_pattern = (char*)"png";
       args.superpixelStepSize = SUPERPIXEL_DEFAULT_STEP_SIZE;
       args.config_file = 0;
@@ -340,7 +340,7 @@ bool predict(int argc, char *argv[]) {
       loadDataAndFeatures(imageDir, maskDir, config, slice, feature, &featureSize);
 
       // rescale features
-      bool rescale_features = false;
+      bool rescale_features = true;
       if(Config::Instance()->getParameter("rescale_features", config_tmp)) {
         rescale_features = config_tmp.c_str()[0] == '1';
       }
@@ -371,6 +371,33 @@ bool predict(int argc, char *argv[]) {
       }
       //FIXME we assume that train(who creates de random colormap)
       //and predict were ran on the same directory, should we?
+      //No. So I have to fix it otherwise the program crashes.
+      //we can use the QSettings or find a way to generate a new random colormaps
+      //or assume that param.nClasses has the correct number of classes
+      ifstream f(colormapFilename.c_str());
+      if (!f.good()) {
+
+          f.close();
+
+          SSVM_PRINT("[SVM_struct] Generating random colormap\n");
+          srand(time(NULL));
+
+          FILE *f = fopen("colormap.txt", "w");
+          if (f == NULL) {
+              fprintf(stderr,"Error writing default colormap to local directory.\n");
+              assert(!"Error writing default colormap to disk.");
+          }
+
+          for(int label = 0; label < param.nClasses; ++label) {
+            uchar r = (uchar)(rand()*255.0 / (double)RAND_MAX);
+            uchar g = (uchar)(rand()*255.0 / (double)RAND_MAX);
+            uchar b = (uchar)(rand()*255.0 / (double)RAND_MAX);
+            ulong classIdx = RGBToclassIdx(r, g, b);
+            fprintf(f, "%d %lu %u %u %u\n", label, classIdx, r, g, b);
+          }
+          fclose(f);
+      }
+
       printf("[Main] Colormap=%s\n", colormapFilename.c_str());
       map<labelType, ulong> labelToClassIdx;
       getLabelToClassMap(colormapFilename.c_str(), labelToClassIdx);
@@ -475,13 +502,4 @@ bool predict(int argc, char *argv[]) {
   return true;
 }
 
-int main(int argc,char* argv[]) {
-
-    if(predict(argc, argv) == false)
-        exit(EXIT_FAILURE);
-
-    printf("[Main] Cleaning\n");
-    printf("[Main] Done\n");
-    return 0;
-}
 

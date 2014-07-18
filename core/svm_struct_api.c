@@ -750,6 +750,9 @@ void initLossFunction_classBased(EXAMPLE  *examples, const long nExamples,
     countLabels[i] = 0;
   }
 
+  //we only support 2 classes.
+  //assert(nClasses == 2);
+
   sparm->lossScale = 1.0;
 
   if(loss_function == 0 && !use01Loss) {
@@ -759,8 +762,9 @@ void initLossFunction_classBased(EXAMPLE  *examples, const long nExamples,
       const map<int, supernode* >& _supernodes = examples[idx].x.slice->getSupernodes();
       for(map<int, supernode* >::const_iterator itNode = _supernodes.begin();
 	  itNode != _supernodes.end(); itNode++) {
-	label = examples[idx].y.nodeLabels[itNode->first];
-	countLabels[label]++;
+          examples[idx].y.nodeLabels[itNode->first];
+          label = examples[idx].y.nodeLabels[itNode->first];
+          countLabels[label]++;
       }
     }
 
@@ -768,10 +772,10 @@ void initLossFunction_classBased(EXAMPLE  *examples, const long nExamples,
     double total = 0;
     for(int i = 0; i < nClasses; i++) {
       if(countLabels[i] != 0) {
-	lossPerLabel[i] = 1.0/countLabels[i];
-	total += lossPerLabel[i];
+          lossPerLabel[i] = 1.0/countLabels[i];
+          total += lossPerLabel[i];
       } else {
-	lossPerLabel[i] = 0; //1
+          lossPerLabel[i] = 0; //1
       }
     }
 
@@ -1730,7 +1734,7 @@ void load_learn_parm(STRUCT_LEARN_PARM *sparm, Config* config)
  * nMaxIterations
  * stepForOutputFiles
  */
-SAMPLE      read_struct_examples(char *file, STRUCT_LEARN_PARM *sparm)
+SAMPLE      read_struct_examples(const char *file, STRUCT_LEARN_PARM *sparm)
 {
   /* Reads struct examples and returns them in sample. The number of
      examples must be written into sample.n */
@@ -1738,7 +1742,7 @@ SAMPLE      read_struct_examples(char *file, STRUCT_LEARN_PARM *sparm)
   EXAMPLE  *examples;
   string config_tmp;
 
-  verbose = true;
+  VERBOSE = true;
 
   SSVM_PRINT("[SVM_struct] Loading examples from %s\n", file);
 
@@ -1862,7 +1866,7 @@ SAMPLE      read_struct_examples(char *file, STRUCT_LEARN_PARM *sparm)
     GraphInference::setColormap(sparm->classIdxToLabel);
   }
 
-  sparm->metric_type = METRIC_SUPERNODE_BASED_01;
+  sparm->metric_type = METRIC_NODE_BASED_01;
   if(Config::Instance()->getParameter("metric_type", config_tmp)) {
     sparm->metric_type = atoi(config_tmp.c_str());
   }
@@ -1901,11 +1905,11 @@ SAMPLE      read_struct_examples(char *file, STRUCT_LEARN_PARM *sparm)
   uint maxNbNodes = 0;
   if (useSlice3d) {
     int featureSize = 0;
-	fprintf(stderr,"training dir %s mask dir %s point %s:%d\n",  trainingDir.c_str(), maskTrainingDir.c_str(), __FILE__,__LINE__);
     load_3d_dataset(trainingDir, maskTrainingDir, sparm, examples, &nExamples, &maxNbNodes, &featureSize, config);
     sparm->featureSize = featureSize;
     //if(testDir != "0" && isDirectory(testDir)) {
     if(testDir != "0" && !testDir.empty()) {
+      //FIXME why does it load the test when training?
       load_3d_dataset(testDir, maskTestDir, sparm, test_examples, &nTestExamples, &maxNbTestNodes, &featureSize, config);
     } else {
       printf("[svm_struct] Test directory %s is not valid\n", testDir.c_str());

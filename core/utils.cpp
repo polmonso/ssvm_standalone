@@ -224,7 +224,7 @@ int getFilesInDir(const char* dir, vector<string> &files,
   DIR *dp;
   struct dirent *dirp;
   if((dp  = opendir(dir)) == NULL) {
-    cout << "Error(" << errno << ") opening " << dir << endl;
+      cerr << "Error opening " << dir << " as a directory. Errno "<< strerror(errno) << endl;
     return errno;
   }
 
@@ -2192,15 +2192,17 @@ void loadDataAndFeatures(string imageDir, string maskDir, Config* config,
   if(!config->getParameter("slice3d", paramSlice3d)){
         //parameter is not set, use default.
         useSlice3d = true;
-    } else {
-      useSlice3d = paramSlice3d.c_str()[0] == '1';
-    }
-  int nGradientLevels = 0;
+  } else {
+    useSlice3d = paramSlice3d.c_str()[0] == '1';
+  }
+  //FIXME this default value has to be the same as in svm_struct_api.c:1552
+  int nGradientLevels = 5;
   if(config->getParameter("nGradientLevels", config_tmp)) {
     nGradientLevels = atoi(config_tmp.c_str());
   }
 
-  int nOrientations = 0;
+  //FIXME this default value has to be the same as in svm_struct_api.c:1589
+  int nOrientations = 1;
   if(config->getParameter("nOrientations", config_tmp)) {
     nOrientations = atoi(config_tmp.c_str());
   }
@@ -2243,7 +2245,7 @@ void loadDataAndFeatures(string imageDir, string maskDir, Config* config,
     slice3d->loadSupervoxels(imageDir.c_str());
 
     // load ground truth
-    bool includeBoundaryLabels = false;
+    bool includeBoundaryLabels = true;
     if(config->getParameter("includeBoundaryLabels", config_tmp)) {
       includeBoundaryLabels = config_tmp.c_str()[0] == '1';
     }
@@ -2817,8 +2819,8 @@ void copyFile(const char* src_filename, const char* dst_filename)
 
   DIR *dir;
   struct dirent *ent;
-  std::cout << " listing files in dir parameter0/ : " << std::endl;
-  if ((dir = opendir ("parameter0/")) != NULL) {
+  std::cout << " listing files in dir parameter_vector0/ : " << std::endl;
+  if ((dir = opendir ("parameter_vector0/")) != NULL) {
     /* print all the files and directories within directory */
     while ((ent = readdir (dir)) != NULL) {
       printf ("%s\n", ent->d_name);
@@ -2826,7 +2828,7 @@ void copyFile(const char* src_filename, const char* dst_filename)
     closedir (dir);
   } else {
     /* could not open directory */
-    perror ("could not open dir parameter0/");
+    perror ("could not open dir parameter_vector0/");
   }
   std::cout << "done listing" << std::endl;
 

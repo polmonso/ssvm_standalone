@@ -852,7 +852,7 @@ void Slice3d::loadFromDir(const char* dir, const node& start, const node& end)
 		fprintf(stderr, "file does not exist %s\n", filePath.c_str());
 		continue;
 	  }
-	  cv::Mat cvimg_slice = cv::imread(filePath.c_str(),CV_LOAD_IMAGE_GRAYSCALE);
+
       IplImage* img_slice = cvLoadImage(filePath.c_str(),0);
 
       if(!img_slice){
@@ -868,7 +868,7 @@ void Slice3d::loadFromDir(const char* dir, const node& start, const node& end)
   }
 
   if(nValidImgs == 0){
-      qFatal("No valid images were found in  %s. %s:%d\n", dir, __FILE__, __LINE__);
+      printf("No valid images were found in %s. Maybe it is not a directory. Trying file import. %s:%d\n", dir, __FILE__, __LINE__);
   }
 
   if(nImgs != -1) {
@@ -946,7 +946,7 @@ void Slice3d::loadFromDir(const char* dir, const node& start, const node& end)
 
           if(img_slice->nChannels != bytes_per_pixel)
             {
-              // FIXME
+              // FIXME fatal when numchannels != bytes_per_pixel //TODO handle better
               printf("[Slice3d] img_slice->nChannels %d\n", img_slice->nChannels);
               qFatal("[Slice3d] img_slice->nChannels %d\n", img_slice->nChannels);
             }
@@ -1162,7 +1162,7 @@ bool Slice3d::importData(const char* filename,
 	      info.close();
 	    }
 	  else
-	    {
+        {
 	      width = iwidth;
 	      height = iheight;
 	      depth = idepth;
@@ -1354,7 +1354,7 @@ void Slice3d::generateSupernodeLabelFromMaskDirectory(const char* mask_dir,
                                                       bool useColorImages)
 {
   if(!isDirectory(mask_dir)) {
-    printf("[Slice3d] Error while loading ground-truth labels: %s is not a valid directory\n", mask_dir);
+    printf("[Slice3d] Error while loading ground-truth labels: %s is not a valid directory. Trying file load.\n", mask_dir);
     return;
   }
 
@@ -1775,6 +1775,7 @@ void Slice3d::exportSupernodeLabels(const char* filename, int nClasses,
     {
       s = getSupernode(sid);
       label = labels[sid];
+      assert(! (label > nClasses));
       if(label>nClasses) {
         printf("[Slice3d] Error in exportSupernodeLabels : label=%d > nClasses=%d\n",label,nClasses+1);
         qFatal("[Slice3d] Error in exportSupernodeLabels : label=%d > nClasses=%d\n",label,nClasses+1);

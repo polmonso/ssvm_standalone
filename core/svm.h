@@ -128,15 +128,15 @@ static inline double powi(double base, int times)
 // the constructor of Kernel prepares to calculate the l*l kernel matrix
 // the member function get_Q is for getting one column from the Q Matrix
 //
-class QMatrix {
+class SSVMQMatrix {
 public:
 	virtual Qfloat *get_Q(int column, int len) const = 0;
 	virtual double *get_QD() const = 0;
 	virtual void swap_index(int i, int j) const = 0;
-	virtual ~QMatrix() {}
+    virtual ~SSVMQMatrix() {}
 };
 
-class Kernel: public QMatrix {
+class Kernel: public SSVMQMatrix {
 public:
 	Kernel(int l, svm_node * const * x, const svm_parameter& param);
 	virtual ~Kernel();

@@ -17,7 +17,7 @@
 
 #include <string>
 
-bool verbose = false;
+bool VERBOSE = false;
 
 #define SSVM_PRINT(format, ...) fprintf (stderr, format, ## __VA_ARGS__)
 

@@ -98,7 +98,6 @@ struct s_RGB
 typedef int sizeSliceType;
 
 //-----------------------------------------------------------------------------
-
 extern int BACKGROUND;
 extern int BOUNDARY;
 extern int FOREGROUND;
@@ -161,8 +160,8 @@ extern int DEFAULT_LONG_RANGE_EDGES_DISTANCE;
 // by libsvmwrite)
 #define FEATURE_FIRST_INDEX 1
 
-extern bool verbose;
+extern bool VERBOSE;
 
-#define PRINT_MESSAGE(format, ...) if(verbose) printf (format, ## __VA_ARGS__)
+#define PRINT_MESSAGE(format, ...) if(VERBOSE) printf (format, ## __VA_ARGS__)
 
 #endif //GLOBALSE_H
