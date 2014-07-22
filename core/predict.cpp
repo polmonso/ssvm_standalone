@@ -277,7 +277,8 @@ bool predict(int argc, char *argv[]) {
          fprintf(stderr, "Insufficient number of arguments. Missing configuration and model file.\n Example: predict -c config.txt -w model.txt\n usage with -h");
          return false;
       }
-
+      //we need to reset the getopt variable
+      optind = 0;
       while((key = getopt_long(argc, argv, "ac:g:i:k:l:m:n:o:s:t:vw:y:h", long_options, &option_index)) != -1){
           parsing_output = parse_opt(key, optarg, &args);
           if(parsing_output == -1){
